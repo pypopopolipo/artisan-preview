@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base Artisans du Bâtiment — France</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.6; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; padding: 60px 40px; text-align: center; }
+  .hero h1 { font-size: 2.8em; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+  .hero h1 span { color: #4fc3f7; }
+  .hero .subtitle { font-size: 1.2em; color: #b0bec5; margin-bottom: 40px; }
+  .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .hero-stat { text-align: center; }
+  .hero-stat .number { font-size: 2.4em; font-weight: 800; color: #4fc3f7; }
+  .hero-stat .label { font-size: 0.9em; color: #90a4ae; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Sections */
+  .section { max-width: 1200px; margin: 0 auto; padding: 50px 30px; }
+  .section h2 { font-size: 1.8em; font-weight: 700; margin-bottom: 30px; color: #1a1a2e; }
+  .section h2 .accent { color: #302b63; }
+
+  /* Cards grid */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .card .card-number { font-size: 2em; font-weight: 800; color: #302b63; }
+  .card .card-label { font-size: 0.85em; color: #666; margin-top: 4px; }
+  .card .card-bar { height: 4px; background: #e0e0e0; border-radius: 4px; margin-top: 12px; }
+  .card .card-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #302b63, #4fc3f7); }
+
+  /* Data quality */
+  .quality-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .quality-block h3 { font-size: 1.1em; margin-bottom: 15px; color: #302b63; }
+  .quality-row { display: flex; align-items: center; margin-bottom: 10px; }
+  .quality-label { width: 180px; font-size: 0.9em; color: #555; }
+  .quality-bar-bg { flex: 1; height: 22px; background: #e8e8e8; border-radius: 6px; overflow: hidden; position: relative; }
+  .quality-bar-fg { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #302b63, #4fc3f7); display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+  .quality-bar-fg span { font-size: 0.75em; font-weight: 700; color: white; }
+  .quality-bar-fg.low { background: linear-gradient(90deg, #ff6b6b, #ee5a24); }
+  .quality-bar-fg.mid { background: linear-gradient(90deg, #f39c12, #fdcb6e); }
+  .quality-bar-fg.high { background: linear-gradient(90deg, #00b894, #00cec9); }
+
+  /* Sample cards */
+  .sample-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+  .sample-card { background: white; border-radius: 14px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.25s; border: 2px solid transparent; position: relative; overflow: hidden; }
+  .sample-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(48,43,99,0.15); border-color: #4fc3f7; }
+  .sample-card.unlocked { border: 2px solid #00b894; background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%); }
+  .sample-card.unlocked:hover { border-color: #00b894; box-shadow: 0 8px 30px rgba(0,184,148,0.2); }
+  .unlocked-tag { position: absolute; top: 0; left: 0; background: linear-gradient(135deg, #00b894, #00cec9); color: white; font-size: 0.65em; font-weight: 800; padding: 4px 14px 4px 10px; border-radius: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px; }
+  .locked-icon { position: absolute; top: 14px; right: 60px; color: #d0d0d0; font-size: 1em; }
+  .sample-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .sample-card-name { font-size: 1.15em; font-weight: 800; color: #1a1a2e; line-height: 1.3; }
+  .sample-card-score { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .score-ring { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 800; color: white; }
+  .sample-card-location { font-size: 0.85em; color: #666; margin-bottom: 12px; }
+  .sample-card-location svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
+  .sample-card-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .sample-card-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid #f0f0f0; font-size: 0.88em; }
+  .sample-card-row .label { color: #999; min-width: 70px; }
+  .sample-card-row .value { color: #333; font-weight: 500; }
+  .sample-card-row .value.blur { filter: blur(4px); user-select: none; }
+  .sample-card-click { text-align: center; margin-top: 14px; font-size: 0.8em; color: #4fc3f7; font-weight: 600; opacity: 0; transition: opacity 0.2s; }
+  .sample-card:hover .sample-card-click { opacity: 1; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78em; font-weight: 700; }
+  .badge-green { background: #e8f5e9; color: #2e7d32; }
+  .badge-blue { background: #e3f2fd; color: #1565c0; }
+  .badge-orange { background: #fff3e0; color: #e65100; }
+  .badge-purple { background: #f3e5f5; color: #6a1b9a; }
+  .badge-rge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
+  .badge-sources { background: #302b63; color: white; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,12,41,0.7); z-index: 1000; backdrop-filter: blur(4px); justify-content: center; align-items: center; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: white; border-radius: 20px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: modalIn 0.3s ease; }
+  @keyframes modalIn { from { transform: scale(0.9) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+  .modal-header { background: linear-gradient(135deg, #0f0c29, #302b63); color: white; padding: 30px; border-radius: 20px 20px 0 0; position: relative; }
+  .modal-header h3 { font-size: 1.5em; font-weight: 800; margin-bottom: 6px; }
+  .modal-header p { color: #b0bec5; font-size: 0.95em; }
+  .modal-close { position: absolute; top: 18px; right: 20px; background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
+  .modal-body { padding: 25px 30px 30px; }
+  .modal-section { margin-bottom: 22px; }
+  .modal-section-title { font-size: 0.78em; text-transform: uppercase; letter-spacing: 1.5px; color: #999; font-weight: 700; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #f0f0f0; }
+  .modal-row { display: flex; padding: 8px 0; }
+  .modal-row .label { width: 140px; color: #999; font-size: 0.88em; flex-shrink: 0; }
+  .modal-row .value { color: #1a1a2e; font-weight: 600; font-size: 0.92em; }
+  .modal-row .value.blur { filter: blur(5px); user-select: none; color: #888; }
+  .modal-row .value .check { color: #00b894; }
+  .modal-row .value .cross { color: #ccc; }
+  .modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .modal-cta { background: linear-gradient(135deg, #302b63, #4fc3f7); color: white; text-align: center; padding: 18px; border-radius: 12px; margin-top: 10px; }
+  .modal-cta p { font-size: 0.85em; margin-bottom: 8px; opacity: 0.85; }
+  .modal-cta strong { font-size: 1em; }
+
+  /* Regions */
+  .region-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+  .region-row { display: flex; align-items: center; background: white; padding: 12px 16px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .region-name { flex: 1; font-weight: 600; font-size: 0.9em; }
+  .region-count { font-weight: 800; color: #302b63; margin-right: 10px; }
+  .region-rge { font-size: 0.8em; color: #00b894; }
+
+  /* CTA */
+  .cta { background: linear-gradient(135deg, #302b63, #0f0c29); color: white; padding: 60px 40px; text-align: center; margin-top: 40px; }
+  .cta h2 { font-size: 2em; margin-bottom: 15px; }
+  .cta p { color: #b0bec5; font-size: 1.1em; margin-bottom: 30px; }
+  .cta-button { display: inline-block; background: #4fc3f7; color: #0f0c29; padding: 14px 40px; border-radius: 8px; font-size: 1.1em; font-weight: 700; text-decoration: none; transition: all 0.3s; }
+  .cta-button:hover { background: white; transform: scale(1.05); }
+
+  /* Sources */
+  .sources-list { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .source-chip { background: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 20px; font-size: 0.85em; color: #b0bec5; border: 1px solid rgba(255,255,255,0.15); }
+
+  /* Locked overlay */
+  .locked-msg { text-align: center; padding: 20px; color: #999; font-style: italic; }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.8em; }
+    .hero-stats { gap: 20px; }
+    .quality-grid { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Base Artisans du Bâtiment <span>France</span></h1>
+  <p class="subtitle">86 207 entreprises artisanales enrichies depuis 7 sources de données</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="number">86 207</div><div class="label">Entreprises</div></div>
+    <div class="hero-stat"><div class="number">31 987</div><div class="label">Emails</div></div>
+    <div class="hero-stat"><div class="number">55 699</div><div class="label">Téléphones</div></div>
+    <div class="hero-stat"><div class="number">17 319</div><div class="label">Mobiles</div></div>
+    <div class="hero-stat"><div class="number">85 622</div><div class="label">Dirigeants</div></div>
+    <div class="hero-stat"><div class="number">35 200</div><div class="label">Certifiés RGE</div></div>
+  </div>
+  <div class="sources-list">
+    <span class="source-chip">CAPEB (annuaire pro)</span>
+    <span class="source-chip">Qualibat</span>
+    <span class="source-chip">QualiENR</span>
+    <span class="source-chip">Qualifelec</span>
+    <span class="source-chip">LinkedIn</span>
+    <span class="source-chip">API SIRENE (INSEE)</span>
+    <span class="source-chip">Sites web (crawl)</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Données disponibles <span class="accent">par entreprise</span></h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-number">31 112</div>
+      <div class="card-label">Emails (dont 16 952 dirigeants)</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:40%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">55 699</div>
+      <div class="card-label">Téléphones (17K mobiles)</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:71%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">75 833</div>
+      <div class="card-label">Dirigeants identifiés (nom + prénom)</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:96%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">26 124</div>
+      <div class="card-label">Sites web</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:33%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">35 200</div>
+      <div class="card-label">Certifiés RGE</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:45%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">18 663</div>
+      <div class="card-label">Chiffre d'affaires connu</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:24%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">25 554</div>
+      <div class="card-label">Assurance RC Pro</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:33%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-number">2 785</div>
+      <div class="card-label">Profils LinkedIn</div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:4%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Qualité des données — <span class="accent">80 colonnes</span></h2>
+  <div class="quality-grid">
+    <div class="quality-block">
+      <h3>Identité & Localisation</h3>
+      <div class="quality-row"><span class="quality-label">SIRET</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:91%"><span>91%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Nom entreprise</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:100%"><span>100%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Code APE / NAF</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:91%"><span>91%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Adresse complète</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:92%"><span>92%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Code postal / Ville</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:99%"><span>99%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">GPS (lat/lng)</span><div class="quality-bar-bg"><div class="quality-bar-fg" style="width:63%"><span>63%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Région / Département</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:90%"><span>90%</span></div></div></div>
+    </div>
+    <div class="quality-block">
+      <h3>Contact & Dirigeant</h3>
+      <div class="quality-row"><span class="quality-label">Téléphone</span><div class="quality-bar-bg"><div class="quality-bar-fg" style="width:65%"><span>65%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Email (au moins 1)</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:37%"><span>37%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Email dirigeant</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:21%"><span>21%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Dirigeant (nom + prénom)</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:99%"><span>99%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Site web</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:33%"><span>33%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Mobile (06/07)</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:20%"><span>20%</span></div></div></div>
+    </div>
+    <div class="quality-block">
+      <h3>Certifications & Assurances</h3>
+      <div class="quality-row"><span class="quality-label">RGE (toutes sources)</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:41%"><span>41%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Qualibat</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:18%"><span>18%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">QualiENR</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:20%"><span>20%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Qualifelec</span><div class="quality-bar-bg"><div class="quality-bar-fg low" style="width:6%"><span>6%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Assurance RC Pro</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:30%"><span>30%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Assurance décennale</span><div class="quality-bar-bg"><div class="quality-bar-fg low" style="width:13%"><span>13%</span></div></div></div>
+    </div>
+    <div class="quality-block">
+      <h3>Données financières & INSEE</h3>
+      <div class="quality-row"><span class="quality-label">État administratif</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:90%"><span>90%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Effectif (tranche)</span><div class="quality-bar-bg"><div class="quality-bar-fg" style="width:65%"><span>65%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Chiffre d'affaires</span><div class="quality-bar-bg"><div class="quality-bar-fg mid" style="width:22%"><span>22%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Solvabilité</span><div class="quality-bar-bg"><div class="quality-bar-fg low" style="width:11%"><span>11%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Catégorie (TPE/PME…)</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:93%"><span>93%</span></div></div></div>
+      <div class="quality-row"><span class="quality-label">Forme juridique</span><div class="quality-bar-bg"><div class="quality-bar-fg high" style="width:99%"><span>99%</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Couverture <span class="accent">géographique</span></h2>
+  <div class="region-grid" id="regions"></div>
+</div>
+
+<div class="section">
+  <h2>Aperçu des données <span class="accent">(extrait)</span></h2>
+  <p style="color:#888; margin-bottom:15px; font-size:0.9em;">30 entreprises les plus riches de la base — cliquez sur une fiche pour voir le détail · Données contact partiellement masquées</p>
+  <div class="sample-grid" id="sample-grid"></div>
+  <p style="text-align:center; padding:20px; color:#999; font-style:italic;">Données complètes (emails, téléphones, SIRET) disponibles dans la version intégrale</p>
+</div>
+
+<!-- Modal détail -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-name"></h3>
+      <p id="modal-location"></p>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<div class="cta">
+  <h2>Intéressé par la base complète ?</h2>
+  <p>86 207 artisans du bâtiment · 81 data points · 7 sources croisées · Export CSV</p>
+  <a href="mailto:contact@example.com?subject=Base Artisans Bâtiment" class="cta-button">Demander un accès</a>
+</div>
+
+<script>
+const REGION_NAMES = {
+  "84": "Auvergne-Rhône-Alpes", "27": "Bourgogne-Franche-Comté", "53": "Bretagne",
+  "24": "Centre-Val de Loire", "94": "Corse", "44": "Grand Est", "32": "Hauts-de-France",
+  "11": "Île-de-France", "28": "Normandie", "75": "Nouvelle-Aquitaine",
+  "76": "Occitanie", "52": "Pays de la Loire", "93": "Provence-Alpes-Côte d'Azur",
+  "01": "Guadeloupe", "02": "Martinique", "03": "Guyane", "04": "La Réunion", "06": "Mayotte",
+};
+
+const data = {
+  "total": 86214,
+  "totalRGE": 35200,
+  "regions": [
+    {
+      "name": "84",
+      "count": 11503,
+      "rge": 5749
+    },
+    {
+      "name": "75",
+      "count": 9083,
+      "rge": 3983
+    },
+    {
+      "name": "76",
+      "count": 8694,
+      "rge": 4197
+    },
+    {
+      "name": "44",
+      "count": 6922,
+      "rge": 3410
+    },
+    {
+      "name": "52",
+      "count": 6922,
+      "rge": 2939
+    },
+    {
+      "name": "53",
+      "count": 5695,
+      "rge": 2286
+    },
+    {
+      "name": "11",
+      "count": 5516,
+      "rge": 2364
+    },
+    {
+      "name": "27",
+      "count": 5471,
+      "rge": 2297
+    },
+    {
+      "name": "93",
+      "count": 5134,
+      "rge": 1768
+    },
+    {
+      "name": "32",
+      "count": 4651,
+      "rge": 2255
+    },
+    {
+      "name": "28",
+      "count": 4268,
+      "rge": 1810
+    },
+    {
+      "name": "24",
+      "count": 2672,
+      "rge": 1468
+    },
+    {
+      "name": "94",
+      "count": 509,
+      "rge": 243
+    },
+    {
+      "name": "04",
+      "count": 257,
+      "rge": 48
+    },
+    {
+      "name": "06",
+      "count": 46,
+      "rge": 1
+    }
+  ],
+  "departments": [
+    {
+      "name": "85",
+      "count": 2053
+    },
+    {
+      "name": "44",
+      "count": 1995
+    },
+    {
+      "name": "69",
+      "count": 1872
+    },
+    {
+      "name": "56",
+      "count": 1643
+    },
+    {
+      "name": "13",
+      "count": 1602
+    },
+    {
+      "name": "34",
+      "count": 1586
+    },
+    {
+      "name": "38",
+      "count": 1570
+    },
+    {
+      "name": "59",
+      "count": 1570
+    },
+    {
+      "name": "49",
+      "count": 1544
+    },
+    {
+      "name": "35",
+      "count": 1442
+    },
+    {
+      "name": "62",
+      "count": 1398
+    },
+    {
+      "name": "22",
+      "count": 1319
+    },
+    {
+      "name": "76",
+      "count": 1303
+    },
+    {
+      "name": "71",
+      "count": 1298
+    },
+    {
+      "name": "29",
+      "count": 1291
+    },
+    {
+      "name": "83",
+      "count": 1279
+    },
+    {
+      "name": "64",
+      "count": 1192
+    },
+    {
+      "name": "57",
+      "count": 1158
+    },
+    {
+      "name": "30",
+      "count": 1134
+    },
+    {
+      "name": "17",
+      "count": 1120
+    }
+  ],
+  "certifications": [
+    [
+      "QualiENR",
+      14939
+    ],
+    [
+      "Qualibat",
+      13783
+    ],
+    [
+      "Qualifelec",
+      4599
+    ],
+    [
+      "Qualibat + QualiENR",
+      1617
+    ],
+    [
+      "QualiENR + Qualifelec",
+      523
+    ],
+    [
+      "Qualibat + Qualifelec",
+      182
+    ],
+    [
+      "Qualibat + QualiENR + Qualifelec",
+      68
+    ]
+  ],
+  "samples": [
+    {
+      "nom": "CABESTAN",
+      "ville": "GRENOBLE",
+      "dept": "38",
+      "region": "84",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "contact@cabestan.fr",
+      "tel": "0486687070",
+      "dirigeant": "Sebastien Enault",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "21326555",
+      "salaries": "338 salariés",
+      "site_web": "www.cabestan.fr",
+      "linkedin": "http://www.linkedin.com/in/s%c3%a9bastien-enault-61923a80",
+      "unlocked": true,
+      "website_mobiles": "",
+      "website_fixes": "04 86 68 70 70|04 86 68 70 79",
+      "website_emails": "contact@cabestan.fr",
+      "siret": "45021441600247",
+      "siren": "450214416",
+      "code_ape": "4322B",
+      "forme_juridique": "SCOP",
+      "date_creation": "01/10/2003",
+      "adresse": "88 RUE ANATOLE FRANCE",
+      "code_postal": "38100",
+      "email_dirigeant": "contact@cabestan.fr",
+      "dirigeant_telephone": "",
+      "fax": "0486687079",
+      "assurance_rc": "SMABTP",
+      "assurance_dc": "SMA BTP",
+      "solvabilite": "4",
+      "qualibat_type": "Générique",
+      "qualienr_certifications": "- Appareil bois indépendant (insert, poêle, etc.) | - Appareil bois hydraulique (chaudière, poêle, etc.) | - Pompe à chaleur | - Chauffe-eau thermodynamique | - Photovoltaïque (0 à 500 kVA) | - Photovoltaïque (0-36 kVA)",
+      "qualifelec_rge": "Oui",
+      "api_categorie_entreprise": "PME",
+      "api_libelle_naf": "Construction",
+      "api_liste_rge": "1905|1911|41|32|22|23|21|12|43|2301D110|2301D112|2301D113|3511D109|5211D101|5311D108|7122D111|7122D114|7122D115",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ELEC SOL AIR",
+      "ville": "RUFFEC",
+      "dept": "16",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "secretariat@elecsolair.fr",
+      "tel": "0545715845",
+      "dirigeant": "Marc Briaud",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "1232934",
+      "salaries": "11 salariés",
+      "site_web": "www.elecsolair.com",
+      "linkedin": "http://www.linkedin.com/in/briaud-marc-963a85101",
+      "unlocked": true,
+      "website_mobiles": "",
+      "website_fixes": "05 45 71 58 45",
+      "website_emails": "",
+      "siret": "49969902300010",
+      "siren": "499699023",
+      "code_ape": "4321A",
+      "forme_juridique": "EI",
+      "date_creation": "01/09/2007",
+      "adresse": "3, Bld Duportal",
+      "code_postal": "16700",
+      "email_dirigeant": "secretariat@elecsolair.fr",
+      "dirigeant_telephone": "06 77 85 49 47",
+      "fax": "0545715532",
+      "assurance_rc": "MUTUELLE DE POITIERS ASSURANCES",
+      "assurance_dc": "MUTUELLE DE POITIERS ASSURANCES (Poitiers)",
+      "solvabilite": "",
+      "qualibat_type": "Générique",
+      "qualienr_certifications": "- Appareil bois hydraulique (chaudière, poêle, etc.) | - Pompe à chaleur | - Chauffe-eau thermodynamique | - Photovoltaïque : intégration bâtiment et/ou surimposition",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "PME",
+      "api_libelle_naf": "Construction",
+      "api_liste_rge": "23|32|43|41|11|22",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "SUNSTICE",
+      "ville": "BOUSSAC BOURG",
+      "dept": "23",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "non",
+      "email": "ldm@sunstice.fr",
+      "tel": "06 33 81 86 85",
+      "dirigeant": "Ludovic Mineau",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "500 thousand USD - 1 million USD",
+      "salaries": "3",
+      "site_web": "http://www.sunstice.fr/",
+      "linkedin": "https://www.linkedin.com/in/ACwAAAacnDYBGpGpAKCdMysK4cQQ3dTwwZaw4GQ",
+      "unlocked": true,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "ecrire@sunstice.fr",
+      "siret": "95238809800016",
+      "siren": "952388098",
+      "code_ape": "4321A",
+      "forme_juridique": "SAS",
+      "date_creation": "2023-05-15",
+      "adresse": "LE PUY LAROUSSE",
+      "code_postal": "23600",
+      "email_dirigeant": "ludovic.mineau@sunstice.fr",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "QBE",
+      "assurance_dc": "QBE",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "- Photovoltaïque (0-36 kVA)",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "PME",
+      "api_libelle_naf": "Construction",
+      "api_liste_rge": "",
+      "linkedin_job_title": "Co-fondateur et Président",
+      "linkedin_headline": "« L’exemple n’est pas le meilleur moyen de convaincre, c’est le seul. » Gandhi.  C’est précisément pour ça que je suis un entrepreneur de terrain. C’est précisément pour ça que je développe aujourd’hui des entreprises dans un secteur vertueux. C’est précisément pour ça que je prends à bras le corps les projets d’installation photovoltaïque.   Passionné par les énergies et leurs enjeux de souveraineté, Entrepreneur au parcours atypique, je vous partage ici mes aventures dans le monde merveilleux de l’énergie solaire.  J’ai créé Sunstice, entreprise à mission pour répondre à la demande d’installation de panneaux photovoltaïques dans la région ex-Limousin. Je porte aussi Octopvs, qui met à disposition des développeurs des équipes dédiées aux grandes centrales en toitures et ombrière.  Envie de découvrir mon univers ? Suivez-moi ! Envie de changer votre dépendance face aux énergies ? Écrivez-moi !"
+    },
+    {
+      "nom": "CENTRALE DEPANNAGE",
+      "ville": "LANGRES",
+      "dept": "52",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@gmail.com",
+      "tel": "032590XX XX",
+      "dirigeant": "S. Fontaine",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "2000000",
+      "salaries": "13 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "HIPOLITE",
+      "ville": "LABEUVILLE",
+      "dept": "55",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@laposte.net",
+      "tel": "032987XX XX",
+      "dirigeant": "C. Hipolite",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "1152664",
+      "salaries": "10 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "AD ENTREPRISES",
+      "ville": "PARIS 20",
+      "dept": "75",
+      "region": "11",
+      "activite": "Construction",
+      "rge": "non",
+      "email": "***@ad-entreprises.fr",
+      "tel": "014885XX XX",
+      "dirigeant": "A. Doganay",
+      "sources": "6",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "1490163",
+      "salaries": "16 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "HENARD HABITAT",
+      "ville": "CHAMPIS",
+      "dept": "07",
+      "region": "84",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@bbox.fr",
+      "tel": "047525XX XX",
+      "dirigeant": "M. Henard",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "350000",
+      "salaries": "3 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "CHARTREUSE PLOMBERIE CHAUFFAGE",
+      "ville": "ST BLAISE DU BUIS",
+      "dept": "38",
+      "region": "84",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@cpc38.com",
+      "tel": "047606XX XX",
+      "dirigeant": "J. Moretto",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "2019631",
+      "salaries": "12 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "AIR ET VIE",
+      "ville": "BRIGNAIS",
+      "dept": "69",
+      "region": "84",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "",
+      "tel": "04 78 XX XX",
+      "dirigeant": "C. Delannoy",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "500 thousand USD - 1 million USD",
+      "salaries": "8 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "BFDI",
+      "ville": "LA CHAIZE LE VICOMTE",
+      "dept": "85",
+      "region": "52",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@gmail.fr",
+      "tel": "025107XX XX",
+      "dirigeant": "F. Belkacem",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "2116315",
+      "salaries": "22 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ATOUT THERMIQUE",
+      "ville": "VAULX EN VELIN",
+      "dept": "69",
+      "region": "84",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@atoutthermique.fr",
+      "tel": "047840XX XX",
+      "dirigeant": "N. Monaco",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "881861",
+      "salaries": "8 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "AGELEC",
+      "ville": "DOUE EN ANJOU",
+      "dept": "49",
+      "region": "52",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@wanadoo.fr",
+      "tel": "024140XX XX",
+      "dirigeant": "G. Mailet",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "1564593",
+      "salaries": "13 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "AMIAUD",
+      "ville": "LES BROUZILS",
+      "dept": "85",
+      "region": "52",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@amiaud.fr",
+      "tel": "025142XX XX",
+      "dirigeant": "P. Amiaud",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "11295991",
+      "salaries": "64 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "BONSENS",
+      "ville": "BALLAN MIRE",
+      "dept": "37",
+      "region": "24",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@bonsens-sarl.com",
+      "tel": "024767XX XX",
+      "dirigeant": "Y. Bonsens",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "4031350",
+      "salaries": "43 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "CONAT SERVICES",
+      "ville": "STE SAVINE",
+      "dept": "10",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@gmail.com",
+      "tel": "032573XX XX",
+      "dirigeant": "R. Ascenso",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "2131579",
+      "salaries": "24 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "LEFEBVRE",
+      "ville": "ERQUY",
+      "dept": "22",
+      "region": "53",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@lefebvre-sarl.com",
+      "tel": "029672XX XX",
+      "dirigeant": "D. Lefebvre",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "1682299",
+      "salaries": "10 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "DARDE DAMIEN",
+      "ville": "ST DIZIER",
+      "dept": "52",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "",
+      "tel": "032505XX XX",
+      "dirigeant": "D. Darde",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "999655",
+      "salaries": "13 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ABC ELEC'",
+      "ville": "ABBECOURT",
+      "dept": "02",
+      "region": "32",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@abc-elec.fr",
+      "tel": "032339XX XX",
+      "dirigeant": "T. Baillavoine",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "317627",
+      "salaries": "5 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ADVANCE INGENIERIE SERVICES",
+      "ville": "PARIS 01",
+      "dept": "75",
+      "region": "11",
+      "activite": "Industrie manufacturière",
+      "rge": "oui",
+      "email": "***@gmail.com",
+      "tel": "01 69 XX XX",
+      "dirigeant": "T. Djebbi",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "2532801",
+      "salaries": "10 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ATEC",
+      "ville": "HABARCQ",
+      "dept": "62",
+      "region": "32",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@atec-62.fr",
+      "tel": "032121XX XX",
+      "dirigeant": "C. Leroy",
+      "sources": "6",
+      "score": "95",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "1615381",
+      "salaries": "10 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "SOLECO",
+      "ville": "BORGO",
+      "dept": "2B",
+      "region": "94",
+      "activite": "Industrie manufacturière",
+      "rge": "oui",
+      "email": "***@soleco.fr",
+      "tel": "049530XX XX",
+      "dirigeant": "J. Navari",
+      "sources": "6",
+      "score": "91",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "12366500",
+      "salaries": "80 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ENR SOLUTIONS",
+      "ville": "TOULON CEDEX 9",
+      "dept": "83",
+      "region": "93",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@enr-solutions.fr",
+      "tel": "048342XX XX",
+      "dirigeant": "G. Bador",
+      "sources": "6",
+      "score": "91",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "3593000",
+      "salaries": "16 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "C.F.E.N.",
+      "ville": "RIVIERES",
+      "dept": "16",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@cfen-16.com",
+      "tel": "054521XX XX",
+      "dirigeant": "F. Tardivat",
+      "sources": "6",
+      "score": "91",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "3061729",
+      "salaries": "15 salariés",
+      "site_web": "oui",
+      "linkedin": "",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "LES BONS PLOMBIERS",
+      "ville": "PARIS 19",
+      "dept": "75",
+      "region": "11",
+      "activite": "Construction",
+      "rge": "non",
+      "email": "***@gmail.com",
+      "tel": "018091XX XX",
+      "dirigeant": "C. Brasseleur",
+      "sources": "6",
+      "score": "91",
+      "qualibat": "",
+      "qualienr": "oui",
+      "qualifelec": "oui",
+      "ca": "",
+      "salaries": "1",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "CHARRIAUT",
+      "ville": "TRESSES",
+      "dept": "33",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@wanadoo.fr",
+      "tel": "055640XX XX",
+      "dirigeant": "C. Dominique",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "1686110",
+      "salaries": "12 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ECO SOLUTIONS",
+      "ville": "PERIGNY",
+      "dept": "17",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@eco-solutions-17.fr",
+      "tel": "095208XX XX",
+      "dirigeant": "J. Delpech",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "500 thousand USD - 1 million USD",
+      "salaries": "4",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "DCL HABITAT",
+      "ville": "BESANCON",
+      "dept": "25",
+      "region": "27",
+      "activite": "Construction",
+      "rge": "non",
+      "email": "***@dclhabitat.com",
+      "tel": "038180XX XX",
+      "dirigeant": "D. Lorton",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "",
+      "qualifelec": "oui",
+      "ca": "394148",
+      "salaries": "4 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ANP PLOMBERIE",
+      "ville": "LA CRECHE",
+      "dept": "79",
+      "region": "75",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@anp-plomberie.fr",
+      "tel": "054910XX XX",
+      "dirigeant": "N. Petry",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "144.6 thousand USD",
+      "salaries": "5",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "ART & FAIENCE SARL",
+      "ville": "RIXHEIM",
+      "dept": "68",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@artetfaience.fr",
+      "tel": "038964XX XX",
+      "dirigeant": "F. Bondi",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "",
+      "qualienr": "oui",
+      "qualifelec": "",
+      "ca": "1 million USD - 2.5 million USD",
+      "salaries": "6",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    },
+    {
+      "nom": "EQUIPEMENTS VONTHRON",
+      "ville": "STE CROIX EN PLAINE",
+      "dept": "68",
+      "region": "44",
+      "activite": "Construction",
+      "rge": "oui",
+      "email": "***@calixo.net",
+      "tel": "038920XX XX",
+      "dirigeant": "L. VONTHRON",
+      "sources": "5",
+      "score": "100",
+      "qualibat": "oui",
+      "qualienr": "",
+      "qualifelec": "oui",
+      "ca": "16000000",
+      "salaries": "115 salariés",
+      "site_web": "oui",
+      "linkedin": "oui",
+      "unlocked": false,
+      "website_mobiles": "",
+      "website_fixes": "",
+      "website_emails": "",
+      "siret": "",
+      "siren": "",
+      "code_ape": "",
+      "forme_juridique": "",
+      "date_creation": "",
+      "adresse": "",
+      "code_postal": "",
+      "email_dirigeant": "",
+      "dirigeant_telephone": "",
+      "fax": "",
+      "assurance_rc": "",
+      "assurance_dc": "",
+      "solvabilite": "",
+      "qualibat_type": "",
+      "qualienr_certifications": "",
+      "qualifelec_rge": "",
+      "api_categorie_entreprise": "",
+      "api_libelle_naf": "",
+      "api_liste_rge": "",
+      "linkedin_job_title": "",
+      "linkedin_headline": ""
+    }
+  ],
+  "stats": {
+    "emails": 31989,
+    "telephones": 55699,
+    "mobiles": 17319,
+    "sites_web": 28837,
+    "dirigeants": 83407,
+    "rge": 35200,
+    "qualibat": 15650,
+    "qualienr": 17147,
+    "qualifelec": 5372,
+    "with_ca": 18663,
+    "with_salaries": 56260,
+    "with_assurance": 25554,
+    "linkedin": 10384
+  }
+};
+
+// Regions
+const regionsEl = document.getElementById("regions");
+data.regions.forEach(r => {
+  const name = REGION_NAMES[r.name] || r.name;
+  const div = document.createElement("div");
+  div.className = "region-row";
+  div.innerHTML = `<span class="region-name">${name}</span><span class="region-count">${r.count.toLocaleString("fr-FR")}</span><span class="region-rge">${r.rge.toLocaleString("fr-FR")} RGE</span>`;
+  regionsEl.appendChild(div);
+});
+
+// Sample cards
+const grid = document.getElementById("sample-grid");
+data.samples.forEach((s, i) => {
+  const score = parseInt(s.score);
+  const scoreColor = score >= 80 ? "#00b894" : score >= 60 ? "#fdcb6e" : "#e17055";
+  const ca = s.ca ? (parseInt(s.ca) >= 1000000 ? (parseInt(s.ca) / 1000000).toFixed(1) + "M€" : Math.round(parseInt(s.ca) / 1000) + "K€") : "";
+  const regionName = REGION_NAMES[s.region] || s.region;
+
+  const badges = [];
+  if (s.rge === "oui") badges.push('<span class="badge badge-rge">RGE</span>');
+  if (s.qualibat === "oui") badges.push('<span class="badge badge-green">Qualibat</span>');
+  if (s.qualienr === "oui") badges.push('<span class="badge badge-blue">QualiENR</span>');
+  if (s.qualifelec === "oui") badges.push('<span class="badge badge-orange">Qualifelec</span>');
+  badges.push('<span class="badge badge-sources">' + s.sources + ' sources</span>');
+
+  const isUnlocked = s.unlocked;
+  const blurClass = isUnlocked ? "" : "blur";
+
+  const card = document.createElement("div");
+  card.className = "sample-card" + (isUnlocked ? " unlocked" : "");
+  card.onclick = () => openModal(s);
+  card.innerHTML = `
+    ${isUnlocked ? '<div class="unlocked-tag">Fiche complète</div>' : '<div class="locked-icon">🔒</div>'}
+    <div class="sample-card-header">
+      <div>
+        <div class="sample-card-name">${s.nom}</div>
+        <div class="sample-card-location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${s.ville}${s.dept ? " (" + s.dept + ")" : ""} · ${regionName}
+        </div>
+      </div>
+      <div class="score-ring" style="background:${scoreColor}">${score}%</div>
+    </div>
+    <div class="sample-card-meta">${badges.join("")}</div>
+    <div class="sample-card-row"><span class="label">Dirigeant</span><span class="value">${s.dirigeant || "—"}</span></div>
+    <div class="sample-card-row"><span class="label">Email</span><span class="value ${blurClass}">${s.email || "—"}</span></div>
+    <div class="sample-card-row"><span class="label">Téléphone</span><span class="value ${blurClass}">${s.tel || "—"}</span></div>
+    ${ca ? '<div class="sample-card-row"><span class="label">CA</span><span class="value">' + ca + '</span></div>' : ''}
+    ${s.salaries ? '<div class="sample-card-row"><span class="label">Effectif</span><span class="value">' + s.salaries + '</span></div>' : ''}
+    <div class="sample-card-click">${isUnlocked ? "Voir la fiche complète →" : "Cliquer pour aperçu →"}</div>
+  `;
+  grid.appendChild(card);
+});
+
+// Modal
+function openModal(s) {
+  const overlay = document.getElementById("modal-overlay");
+  const score = parseInt(s.score);
+  const scoreColor = score >= 80 ? "#00b894" : score >= 60 ? "#fdcb6e" : "#e17055";
+  const ca = s.ca ? (parseInt(s.ca) >= 1000000 ? (parseInt(s.ca) / 1000000).toFixed(1) + "M€" : Math.round(parseInt(s.ca) / 1000) + "K€") : "—";
+  const regionName = REGION_NAMES[s.region] || s.region;
+  const check = '<span class="check">✓</span>';
+  const cross = '<span class="cross">—</span>';
+
+  document.getElementById("modal-name").textContent = s.nom;
+  document.getElementById("modal-location").innerHTML = `${s.ville}${s.dept ? " (" + s.dept + ")" : ""} · ${regionName} · Score complétude <strong style="color:${scoreColor}">${score}%</strong>${s.unlocked ? ' · <span style="background:#00b894;color:white;padding:2px 8px;border-radius:8px;font-size:0.8em">FICHE COMPLÈTE</span>' : ''}`;
+
+  const isUnlocked = s.unlocked;
+  const blurClass = isUnlocked ? "" : "blur";
+
+  let html = "";
+
+  // === IDENTITÉ (unlocked only) ===
+  if (isUnlocked) {
+    html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Identité</div>
+      <div class="modal-row"><span class="label">SIRET</span><span class="value" style="font-family:monospace;letter-spacing:1px">${s.siret || "—"}</span></div>
+      <div class="modal-row"><span class="label">SIREN</span><span class="value" style="font-family:monospace">${s.siren || "—"}</span></div>
+      <div class="modal-row"><span class="label">Forme juridique</span><span class="value">${s.forme_juridique || "—"}</span></div>
+      <div class="modal-row"><span class="label">Code APE</span><span class="value">${s.code_ape || "—"}</span></div>
+      <div class="modal-row"><span class="label">Catégorie INSEE</span><span class="value">${s.api_categorie_entreprise || "—"}</span></div>
+      <div class="modal-row"><span class="label">Date de création</span><span class="value">${s.date_creation || "—"}</span></div>
+      <div class="modal-row"><span class="label">Adresse</span><span class="value">${s.adresse || "—"}, ${s.code_postal || ""} ${s.ville || ""}</span></div>
+    </div>`;
+  }
+
+  // === CONTACT ===
+  // Build phone list for unlocked
+  let phonesHtml = "";
+  if (isUnlocked) {
+    const phones = [];
+    if (s.tel) phones.push({ num: s.tel, type: /^0[67]/.test(s.tel.replace(/[\\s.\\-]/g,"")) ? "Mobile" : "Fixe", src: "Base" });
+    if (s.dirigeant_telephone) phones.push({ num: s.dirigeant_telephone, type: "Mobile dirigeant", src: "Certifications" });
+    if (s.website_mobiles) s.website_mobiles.split("|").forEach(p => { if (p.trim() && !phones.some(x => x.num.replace(/\\D/g,"") === p.trim().replace(/\\D/g,""))) phones.push({ num: p.trim(), type: "Mobile", src: "Site web" }); });
+    if (s.website_fixes) s.website_fixes.split("|").forEach(p => { if (p.trim() && !phones.some(x => x.num.replace(/\\D/g,"") === p.trim().replace(/\\D/g,""))) phones.push({ num: p.trim(), type: "Fixe", src: "Site web" }); });
+    if (phones.length > 0) {
+      phonesHtml = phones.map(p => '<div class="modal-row"><span class="label">' + p.type + '</span><span class="value"><a href="tel:' + p.num.replace(/[\\s.\\-]/g,"") + '" style="color:#302b63;text-decoration:none;font-weight:700">' + p.num + '</a> <span style="font-size:0.75em;color:#aaa;font-weight:400">(' + p.src + ')</span></span></div>').join("");
+    }
+  }
+
+  // Build email list for unlocked
+  let emailsHtml = "";
+  if (isUnlocked) {
+    const emails = [];
+    if (s.email) emails.push({ addr: s.email, type: "Email principal" });
+    if (s.email_dirigeant && s.email_dirigeant !== s.email) emails.push({ addr: s.email_dirigeant, type: "Email dirigeant" });
+    if (s.website_emails) s.website_emails.split("|").forEach(e => { if (e.trim() && !emails.some(x => x.addr === e.trim())) emails.push({ addr: e.trim(), type: "Site web" }); });
+    emailsHtml = emails.map(e => '<div class="modal-row"><span class="label">' + e.type + '</span><span class="value"><a href="mailto:' + e.addr + '" style="color:#302b63;text-decoration:none;font-weight:700">' + e.addr + '</a></span></div>').join("");
+  }
+
+  // Site web + LinkedIn
+  let siteHtml, linkedinHtml;
+  if (isUnlocked && s.site_web && s.site_web !== "oui") {
+    const url = s.site_web.startsWith("http") ? s.site_web : "https://" + s.site_web;
+    siteHtml = '<a href="' + url + '" target="_blank" style="color:#302b63;text-decoration:none;font-weight:600">' + s.site_web + ' ↗</a>';
+  } else {
+    siteHtml = s.site_web ? check + " Disponible" : cross;
+  }
+  if (isUnlocked && s.linkedin && s.linkedin !== "oui") {
+    linkedinHtml = '<a href="' + s.linkedin + '" target="_blank" style="color:#0077b5;text-decoration:none;font-weight:600">Voir le profil ↗</a>';
+  } else {
+    linkedinHtml = s.linkedin ? check + " Profil trouvé" : cross;
+  }
+
+  html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Contact</div>
+      <div class="modal-row"><span class="label">Dirigeant</span><span class="value">${s.dirigeant || "—"}</span></div>
+      ${isUnlocked && s.linkedin_job_title ? '<div class="modal-row"><span class="label">Fonction</span><span class="value">' + s.linkedin_job_title + '</span></div>' : ''}
+      ${isUnlocked ? emailsHtml : '<div class="modal-row"><span class="label">Email</span><span class="value blur">' + (s.email || "—") + '</span></div>'}
+      ${isUnlocked ? phonesHtml : '<div class="modal-row"><span class="label">Téléphone</span><span class="value blur">' + (s.tel || "—") + '</span></div>'}
+      ${isUnlocked && s.fax ? '<div class="modal-row"><span class="label">Fax</span><span class="value">' + s.fax + '</span></div>' : ''}
+      <div class="modal-row"><span class="label">Site web</span><span class="value">${siteHtml}</span></div>
+      <div class="modal-row"><span class="label">LinkedIn</span><span class="value">${linkedinHtml}</span></div>
+    </div>`;
+
+  // === ACTIVITÉ & FINANCIER ===
+  html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Activité & Financier</div>
+      <div class="modal-row"><span class="label">Activité</span><span class="value">${isUnlocked ? (s.api_libelle_naf || s.activite || "—") : (s.activite || "—")}</span></div>
+      <div class="modal-row"><span class="label">Chiffre d'affaires</span><span class="value">${ca}</span></div>
+      <div class="modal-row"><span class="label">Effectif</span><span class="value">${s.salaries || "—"}</span></div>
+      ${isUnlocked ? '<div class="modal-row"><span class="label">Solvabilité</span><span class="value">' + (s.solvabilite || "—") + '</span></div>' : ''}
+    </div>`;
+
+  // === CERTIFICATIONS ===
+  html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Certifications & Labels</div>
+      <div class="modal-row"><span class="label">RGE</span><span class="value">${s.rge === "oui" ? check + " Certifié" : cross}</span></div>
+      <div class="modal-row"><span class="label">Qualibat</span><span class="value">${s.qualibat === "oui" ? check + (isUnlocked && s.qualibat_type ? " " + s.qualibat_type : " Certifié") : cross}</span></div>
+      <div class="modal-row"><span class="label">QualiENR</span><span class="value">${s.qualienr === "oui" ? check + (isUnlocked && s.qualienr_certifications ? " " + s.qualienr_certifications : " Certifié") : cross}</span></div>
+      <div class="modal-row"><span class="label">Qualifelec</span><span class="value">${s.qualifelec === "oui" ? check + (isUnlocked && s.qualifelec_rge ? " RGE: " + s.qualifelec_rge : " Certifié") : cross}</span></div>
+      ${isUnlocked && s.api_liste_rge ? '<div class="modal-row"><span class="label">Labels RGE API</span><span class="value" style="font-size:0.82em;line-height:1.4">' + s.api_liste_rge + '</span></div>' : ''}
+    </div>`;
+
+  // === ASSURANCES (unlocked only) ===
+  if (isUnlocked) {
+    html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Assurances</div>
+      <div class="modal-row"><span class="label">RC Professionnelle</span><span class="value">${s.assurance_rc ? check + " " + s.assurance_rc : cross}</span></div>
+      <div class="modal-row"><span class="label">Décennale</span><span class="value">${s.assurance_dc ? check + " " + s.assurance_dc : cross}</span></div>
+    </div>`;
+  }
+
+  // === ENRICHISSEMENT ===
+  html += `
+    <div class="modal-section">
+      <div class="modal-section-title">Enrichissement</div>
+      <div class="modal-row"><span class="label">Sources</span><span class="value"><strong>${s.sources}</strong> sources croisées</span></div>
+      <div class="modal-row"><span class="label">Complétude</span><span class="value"><strong style="color:${scoreColor}">${score}%</strong> des 81 champs renseignés</span></div>
+    </div>`;
+
+  // === CTA ===
+  if (isUnlocked) {
+    html += `<div class="modal-cta" style="background:linear-gradient(135deg, #00b894, #00cec9);">
+      <p>Voici le niveau de détail pour chaque fiche de la base</p>
+      <strong>86 207 fiches disponibles</strong>
+    </div>`;
+  } else {
+    html += `<div class="modal-cta">
+      <p>SIRET, emails complets, téléphones, assurances, GPS... disponibles dans la version intégrale</p>
+      <strong>86 207 fiches comme celle-ci</strong>
+    </div>`;
+  }
+
+  document.getElementById("modal-body").innerHTML = html;
+
+  overlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  document.getElementById("modal-overlay").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("modal-overlay").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") closeModal();
+});
+</script>
+
+</body>
+</html>
