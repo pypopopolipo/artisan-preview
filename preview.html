@@ -1855,7 +1855,8 @@ const grid = document.getElementById("sample-grid");
 data.samples.forEach((s, i) => {
   const score = parseInt(s.score);
   const scoreColor = score >= 80 ? "#00b894" : score >= 60 ? "#fdcb6e" : "#e17055";
-  const ca = s.ca ? (parseInt(s.ca) >= 1000000 ? (parseInt(s.ca) / 1000000).toFixed(1) + "M€" : Math.round(parseInt(s.ca) / 1000) + "K€") : "";
+  const caVal = s.ca ? parseInt(s.ca) : 0;
+  const ca = caVal >= 1000000 ? (caVal / 1000000).toFixed(1) + "M€" : caVal >= 10000 ? Math.round(caVal / 1000) + "K€" : "";
   const regionName = REGION_NAMES[s.region] || s.region;
 
   const badges = [];
@@ -1899,7 +1900,8 @@ function openModal(s) {
   const overlay = document.getElementById("modal-overlay");
   const score = parseInt(s.score);
   const scoreColor = score >= 80 ? "#00b894" : score >= 60 ? "#fdcb6e" : "#e17055";
-  const ca = s.ca ? (parseInt(s.ca) >= 1000000 ? (parseInt(s.ca) / 1000000).toFixed(1) + "M€" : Math.round(parseInt(s.ca) / 1000) + "K€") : "—";
+  const caVal2 = s.ca ? parseInt(s.ca) : 0;
+  const ca = caVal2 >= 1000000 ? (caVal2 / 1000000).toFixed(1) + "M€" : caVal2 >= 10000 ? Math.round(caVal2 / 1000) + "K€" : "Non connu";
   const regionName = REGION_NAMES[s.region] || s.region;
   const check = '<span class="check">✓</span>';
   const cross = '<span class="cross">—</span>';
