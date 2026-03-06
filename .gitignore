@@ -5,3 +5,6 @@ node_modules/
 .website_progress.json
 .pj_progress.json
 reconciliation_stats.json
+preview_data.json
+
+.vercel
