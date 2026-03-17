@@ -1186,12 +1186,19 @@ function exportCSV(entities) {
   const header = keys.map(escapeCSV).join(",");
   const lines = [header];
 
+  const linkedinOnly = [];
   for (const e of sorted) {
+    // Exclure les entités LinkedIn-only de l'export principal (non vérifiées par SIRET)
+    if (e.sources === "linkedin" || (Array.isArray(e.sources) && e.sources.join("|") === "linkedin")) {
+      linkedinOnly.push(e);
+      continue;
+    }
     lines.push(keys.map(k => escapeCSV(e[k])).join(","));
   }
 
   fs.writeFileSync(OUTPUT_FILE, "\ufeff" + lines.join("\n"), "utf-8");
-  return sorted;
+  console.log(`  LinkedIn-only exclus de l'export principal: ${linkedinOnly.length}`);
+  return sorted.filter(e => !(e.sources === "linkedin" || (Array.isArray(e.sources) && e.sources.join("|") === "linkedin")));
 }
 
 function exportUnmatched(rows) {
