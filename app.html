@@ -252,6 +252,14 @@
   .fiche-card.contacted {
     border-color: #00b89444;
   }
+  .fiche-card.save-ok {
+    border-color: #00b894 !important;
+    box-shadow: 0 0 12px rgba(0,184,148,0.3);
+  }
+  .fiche-card.save-err {
+    border-color: #ef5350 !important;
+    box-shadow: 0 0 12px rgba(239,83,80,0.3);
+  }
 
   .fiche-header {
     display: flex; justify-content: space-between; align-items: flex-start;
@@ -466,9 +474,15 @@
 
   <!-- Filters -->
   <div class="filters-bar" id="filtersBar">
-    <input type="text" class="filter-input" id="filterSearch" placeholder="Recherche nom, ville, dirigeant..." oninput="applyFilters()">
+    <input type="text" class="filter-input" id="filterSearch" placeholder="Recherche nom, ville, assureur, tel..." oninput="debouncedFilter()">
     <select class="filter-select" id="filterVille" onchange="applyFilters()">
       <option value="">Toutes les villes</option>
+    </select>
+    <select class="filter-select" id="filterSort" onchange="applyFilters()">
+      <option value="score">Tri : Score</option>
+      <option value="ville">Tri : Ville A→Z</option>
+      <option value="nom">Tri : Nom A→Z</option>
+      <option value="mobile">Tri : Mobile d'abord</option>
     </select>
     <button class="filter-toggle" id="filterMobile" onclick="toggleFilter(this)">Mobile</button>
     <button class="filter-toggle" id="filterEmail" onclick="toggleFilter(this)">Email</button>
@@ -686,6 +700,7 @@ function cycleContactFilter() {
 function resetFilters() {
   document.getElementById('filterSearch').value = '';
   document.getElementById('filterVille').value = '';
+  document.getElementById('filterSort').value = 'score';
   document.querySelectorAll('.filter-toggle').forEach(b => b.classList.remove('active'));
   contactFilterState = 0;
   const btn = document.getElementById('filterContacted');
@@ -694,9 +709,17 @@ function resetFilters() {
   applyFilters();
 }
 
+// Debounce
+let _debounceTimer = null;
+function debouncedFilter() {
+  clearTimeout(_debounceTimer);
+  _debounceTimer = setTimeout(applyFilters, 250);
+}
+
 function applyFilters() {
   const search = (document.getElementById('filterSearch').value || '').toLowerCase().trim();
   const ville = document.getElementById('filterVille').value;
+  const sortBy = document.getElementById('filterSort').value;
   const needMobile = document.getElementById('filterMobile').classList.contains('active');
   const needEmail = document.getElementById('filterEmail').classList.contains('active');
   const needRge = document.getElementById('filterRge').classList.contains('active');
@@ -706,7 +729,8 @@ function applyFilters() {
     if (search) {
       const haystack = [
         f.nom_entreprise, f.ville, f.dirigeant_nom_complet, f.dirigeant_prenom, f.dirigeant_nom,
-        f.code_postal, f.specialite
+        f.code_postal, f.specialite, f.assureur, f.assurance_rc, f.telephone, f.dirigeant_telephone,
+        f.certifs_enr, f.activites_principales
       ].filter(Boolean).join(' ').toLowerCase();
       if (!haystack.includes(search)) return false;
     }
@@ -720,6 +744,14 @@ function applyFilters() {
     if (contactFilterState === 2 && getMarker(f).contacted) return false;
 
     return true;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    if (sortBy === 'ville') return (a.ville || '').localeCompare(b.ville || '', 'fr');
+    if (sortBy === 'nom') return (a.nom_entreprise || '').localeCompare(b.nom_entreprise || '', 'fr');
+    if (sortBy === 'mobile') return (hasMobile(b) ? 1 : 0) - (hasMobile(a) ? 1 : 0);
+    return (getScore(b)) - (getScore(a)); // default: score desc
   });
 
   currentPage = 1;
@@ -738,7 +770,7 @@ function renderPage() {
   const grid = document.getElementById('cardsGrid');
   const noRes = document.getElementById('noResults');
 
-  document.getElementById('filterCount').innerHTML = `<strong>${total}</strong> resultat${total !== 1 ? 's' : ''}`;
+  document.getElementById('filterCount').innerHTML = `<strong>${total}</strong> résultat${total !== 1 ? 's' : ''}`;
 
   if (page.length === 0) {
     grid.innerHTML = '';
@@ -877,6 +909,13 @@ function changePage(delta) {
   renderPage();
 }
 
+// ===== SAVE FEEDBACK =====
+function flashCard(el, ok) {
+  const cls = ok ? 'save-ok' : 'save-err';
+  el.classList.add(cls);
+  setTimeout(() => el.classList.remove(cls), 1000);
+}
+
 // ===== CONTACTED / NOTES =====
 async function toggleContacted(siret, btn) {
   if (!siret) return;
@@ -886,37 +925,57 @@ async function toggleContacted(siret, btn) {
 
   btn.classList.toggle('active', m.contacted);
   btn.innerHTML = m.contacted ? '&#10003; Contacté' : 'Marquer contacté';
-  btn.closest('.fiche-card').classList.toggle('contacted', m.contacted);
+  const card = btn.closest('.fiche-card');
+  card.classList.toggle('contacted', m.contacted);
 
   updateContactedBar();
 
   try {
-    await sbClient.from('markers').upsert({
+    const { error } = await sbClient.from('markers').upsert({
       siret: siret,
       contacted: m.contacted,
       notes: m.notes
     }, { onConflict: 'siret' });
+    flashCard(card, !error);
   } catch (e) {
-    console.error('Error saving contacted:', e);
+    flashCard(card, false);
   }
 }
 
+let _pendingNote = null;
 async function saveNote(siret, textarea) {
   if (!siret) return;
   const m = markers[siret] || { contacted: false, notes: '' };
+  if (m.notes === textarea.value) return; // no change
   m.notes = textarea.value;
   markers[siret] = m;
+  _pendingNote = null;
 
+  const card = textarea.closest('.fiche-card');
   try {
-    await sbClient.from('markers').upsert({
+    const { error } = await sbClient.from('markers').upsert({
       siret: siret,
       contacted: m.contacted,
       notes: m.notes
     }, { onConflict: 'siret' });
+    flashCard(card, !error);
   } catch (e) {
-    console.error('Error saving note:', e);
+    flashCard(card, false);
   }
 }
+
+// Track note in progress for beforeunload
+document.addEventListener('focusin', e => {
+  if (e.target.classList && e.target.classList.contains('note-field')) {
+    _pendingNote = e.target;
+  }
+});
+window.addEventListener('beforeunload', e => {
+  if (_pendingNote) {
+    const siret = _pendingNote.closest('.fiche-card')?.dataset.siret;
+    if (siret) saveNote(siret, _pendingNote);
+  }
+});
 
 // ===== EXCEL EXPORT =====
 function exportExcel() {
