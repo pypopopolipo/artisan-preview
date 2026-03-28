@@ -99,7 +99,7 @@ function v(row, col, headers) {
 function hasContact(row, headers) {
   const contactFields = [
     'telephone', 'email_generique', 'email_dirigeant',
-    'dirigeant_telephone', 'website_emails', 'website_mobiles'
+    'dirigeant_telephone', 'website_emails', 'website_mobiles', 'website_fixes'
   ];
   return contactFields.some(f => v(row, f, headers) !== '');
 }
@@ -144,13 +144,18 @@ function buildFiche(row, headers, clientId) {
     assurance_dc: g('assurance_dc'),
     assureur: g('qualibat_assurance'),
     chiffre_affaires: g('chiffre_affaires'),
-    effectif: g('api_tranche_effectif'),
+    effectif: g('nb_salaries'),
     tranche_effectif: g('api_tranche_effectif'),
     categorie_entreprise: g('api_categorie_entreprise'),
     solvabilite: g('solvabilite'),
     sources: g('sources'),
     nb_sources: g('nb_sources') ? parseInt(g('nb_sources'), 10) : null,
     score_completude: g('score_completude') ? parseFloat(g('score_completude')) : null,
+    latitude: g('latitude') ? parseFloat(g('latitude')) : null,
+    longitude: g('longitude') ? parseFloat(g('longitude')) : null,
+    risque_impaye: g('risque_impaye'),
+    nb_salaries: g('nb_salaries'),
+    api_etat_administratif: g('api_etat_administratif'),
   };
 }
 
