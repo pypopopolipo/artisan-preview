@@ -1,0 +1,57 @@
+{
+  "total_certifies": 35712,
+  "exported": 34755,
+  "sources": {
+    "qualibat": 15650,
+    "qualienr": 17147,
+    "qualifelec": 5373,
+    "capeb": 11490,
+    "linkedin": 1108,
+    "api_sirene": 34961,
+    "website": 12919
+  },
+  "nb_sources_distribution": {
+    "1": 364,
+    "2": 14447,
+    "3": 14975,
+    "4": 5193,
+    "5": 706,
+    "6": 26,
+    "7": 1
+  },
+  "cross_source": {
+    "both_qb_qe": 1685,
+    "both_qb_qf": 250,
+    "both_qe_qf": 591,
+    "all_three": 68
+  },
+  "capeb_enrichment": {
+    "enriched": 11490,
+    "total": 35712
+  },
+  "api_sirene": {
+    "enriched": 34961,
+    "notFound": 450,
+    "noMatch": 42450
+  },
+  "website_crawl": {
+    "enriched": 12919,
+    "newEmails": 1976,
+    "newMobiles": 2372,
+    "newTels": 3746
+  },
+  "linkedin": {
+    "matched": 1108,
+    "unmatched": 8593
+  },
+  "cleanup": {
+    "fixedCP": 5460,
+    "fixedEmail": 1460,
+    "fixedTel": 1355,
+    "fixedSiret": 0,
+    "fixedCA": 401,
+    "removed": 0
+  },
+  "avg_completeness": 74,
+  "cessees": 957
+}

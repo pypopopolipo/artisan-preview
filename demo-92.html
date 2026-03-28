@@ -3,166 +3,945 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Extrait — 50 artisans du 92 (Hauts-de-Seine)</title>
-<meta name="robots" content="noindex">
+<title>Base Artisans BTP — Département 92</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.6; }
-  .hero { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; padding: 50px 30px; text-align: center; }
-  .hero h1 { font-size: 2.2em; font-weight: 800; margin-bottom: 8px; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0d0d1a; color: #e0e0e0; line-height: 1.6; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white; padding: 50px 40px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 2.4em; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
   .hero h1 span { color: #4fc3f7; }
-  .hero .sub { font-size: 1em; color: #b0bec5; margin-bottom: 28px; }
-  .hero-stats { display: flex; justify-content: center; gap: 35px; flex-wrap: wrap; margin-bottom: 20px; }
-  .hero-stat .number { font-size: 2em; font-weight: 800; color: #4fc3f7; }
-  .hero-stat .label { font-size: 0.8em; color: #90a4ae; text-transform: uppercase; letter-spacing: 1px; }
-  .notice { max-width: 820px; margin: 20px auto 0; background: #fff8e1; border-left: 4px solid #f59e0b; color: #92400e; padding: 13px 18px; font-size: 0.88em; border-radius: 0 8px 8px 0; }
-  .section { max-width: 1200px; margin: 0 auto; padding: 36px 20px; }
-  .section h2 { font-size: 1.5em; font-weight: 700; margin-bottom: 18px; }
-  .section h2 span { color: #302b63; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
-  .card { background: linear-gradient(135deg, #f0fff4 0%, #fff 100%); border: 2px solid #00b894; border-radius: 14px; padding: 20px; cursor: pointer; transition: all 0.22s; }
-  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,184,148,0.18); }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .card-tag { display: inline-block; background: linear-gradient(135deg, #00b894, #00cec9); color: white; font-size: 0.62em; font-weight: 800; padding: 3px 10px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-  .card-name { font-size: 1.05em; font-weight: 800; color: #1a1a2e; }
-  .card-loc { font-size: 0.82em; color: #777; margin-top: 2px; }
-  .score { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7em; font-weight: 800; color: white; flex-shrink: 0; }
-  .badges { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
-  .badge { padding: 2px 9px; border-radius: 10px; font-size: 0.74em; font-weight: 700; }
-  .bg { background: #e8f5e9; color: #2e7d32; }
-  .bb { background: #e3f2fd; color: #1565c0; }
-  .bo { background: #fff3e0; color: #e65100; }
-  .bp { background: #f3e5f5; color: #6a1b9a; }
-  .br { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
-  .bs { background: #302b63; color: white; }
-  .row { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-top: 1px solid #f0f0f0; font-size: 0.85em; }
-  .lbl { color: #999; min-width: 68px; flex-shrink: 0; }
-  .val { color: #222; font-weight: 500; word-break: break-all; }
-  .val.none { color: #ccc; font-style: italic; font-weight: 400; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,12,41,0.75); z-index: 1000; backdrop-filter: blur(4px); justify-content: center; align-items: center; }
-  .modal-overlay.active { display: flex; }
-  .modal { background: white; border-radius: 18px; max-width: 560px; width: 92%; max-height: 88vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: mIn 0.22s ease; }
-  @keyframes mIn { from { transform: scale(0.92) translateY(14px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-  .mhead { background: linear-gradient(135deg, #0f0c29, #302b63); color: white; padding: 24px 26px; border-radius: 18px 18px 0 0; position: relative; }
-  .mhead h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 4px; }
-  .mhead p { color: #b0bec5; font-size: 0.88em; }
-  .mclose { position: absolute; top: 14px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1em; }
-  .mclose:hover { background: rgba(255,255,255,0.3); }
-  .mbody { padding: 20px 26px 26px; }
-  .msec { margin-bottom: 18px; }
-  .msec-title { font-size: 0.73em; text-transform: uppercase; letter-spacing: 1.5px; color: #999; font-weight: 700; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid #f0f0f0; }
-  .mrow { display: flex; padding: 6px 0; }
-  .mrow .lbl { width: 126px; color: #999; font-size: 0.85em; flex-shrink: 0; }
-  .mrow .val { color: #1a1a2e; font-weight: 600; font-size: 0.88em; word-break: break-all; }
-  .cta { background: linear-gradient(135deg, #302b63, #0f0c29); color: white; padding: 50px 30px; text-align: center; margin-top: 20px; }
-  .cta h2 { font-size: 1.8em; margin-bottom: 12px; }
-  .cta p { color: #b0bec5; margin-bottom: 24px; font-size: 1em; }
-  .cta a { display: inline-block; background: #4fc3f7; color: #0f0c29; padding: 13px 36px; border-radius: 8px; font-size: 1em; font-weight: 700; text-decoration: none; }
-  .cta a:hover { background: white; }
-  @media (max-width: 600px) { .hero h1 { font-size: 1.5em; } .hero-stats { gap: 16px; } }
+  .hero .subtitle { font-size: 1.05em; color: #90a4ae; margin-bottom: 6px; }
+  .hero .sample-note { font-size: 0.88em; color: #607d8b; margin-top: 12px; }
+
+  /* Grid */
+  .grid-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Cards */
+  .fiche-card {
+    background: #151528;
+    border: 1px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .fiche-card:hover {
+    border-color: #4fc3f7;
+    box-shadow: 0 4px 24px rgba(79,195,247,0.1);
+  }
+
+  .fiche-header {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;
+  }
+  .fiche-name {
+    font-size: 1.12em; font-weight: 800; color: #ffffff; line-height: 1.3; flex: 1; margin-right: 10px;
+  }
+  .fiche-location {
+    font-size: 0.85em; color: #78909c; margin-bottom: 14px;
+  }
+
+  /* Score ring */
+  .score-ring {
+    width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .score-ring span {
+    background: #151528; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68em; font-weight: 800; color: #b0bec5;
+  }
+
+  /* Contact block — THE STAR */
+  .contact-block {
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .contact-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0; font-size: 0.92em; color: #cfd8dc;
+  }
+  .contact-value { font-weight: 600; color: #e8e8e8; font-size: 1.02em; }
+  .contact-link { color: #4fc3f7; text-decoration: none; font-weight: 600; }
+  .contact-link:hover { text-decoration: underline; }
+  .contact-tag {
+    font-size: 0.68em; background: #2a2a4a; color: #90a4ae; padding: 1px 7px;
+    border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .mobile-highlight {
+    background: rgba(0,184,148,0.1); border-radius: 6px; padding: 5px 8px; margin: 2px -8px;
+  }
+  .mobile-highlight .contact-value { color: #00e6b8; }
+
+  /* Dirigeant */
+  .dirigeant-block { margin-bottom: 10px; }
+  .dir-name { font-size: 0.9em; color: #b0bec5; font-weight: 600; }
+  .dir-linkedin { margin-top: 3px; }
+  .linkedin-link { color: #4fc3f7; font-size: 0.82em; text-decoration: none; font-weight: 600; }
+  .linkedin-link:hover { text-decoration: underline; }
+
+  /* Metier */
+  .metier-block { margin-bottom: 10px; }
+  .metier-spec { font-size: 0.88em; color: #90a4ae; font-weight: 600; margin-bottom: 2px; }
+  .metier-acts { font-size: 0.8em; color: #607d8b; }
+
+  /* Badges */
+  .badges-block { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.75em; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .badge-rge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
+  .badge-blue { background: #1a3a5c; color: #4fc3f7; }
+  .badge-teal { background: #0d3d3d; color: #00cec9; }
+  .badge-orange { background: #3d2a0d; color: #f5a623; }
+
+  /* Assurance & Financier */
+  .card-assurance { display: inline-block; font-size: 0.85em; font-weight: 600; color: #fff; background: linear-gradient(135deg, #6a1b9a, #8e24aa); padding: 5px 12px; border-radius: 8px; margin-bottom: 8px; }
+  .card-no-assurance { display: inline-block; font-size: 0.82em; color: #ef5350; background: rgba(239,83,80,0.12); padding: 4px 10px; border-radius: 8px; margin-bottom: 8px; }
+  .card-financier { font-size: 0.78em; color: #546e7a; border-top: 1px solid #2a2a4a; padding-top: 8px; margin-top: 6px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 40px 20px; color: #546e7a; font-size: 0.9em;
+    border-top: 1px solid #1a1a35;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+  .footer .email { font-size: 1.1em; font-weight: 700; color: #78909c; margin-top: 12px; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>Artisans du <span>92 — Hauts-de-Seine</span></h1>
-  <p class="sub">Extrait représentatif · 50 fiches débloquées sur 589 disponibles</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="number">589</div><div class="label">Fiches dispo</div></div>
-    <div class="hero-stat"><div class="number">376</div><div class="label">Avec email</div></div>
-    <div class="hero-stat"><div class="number">380</div><div class="label">Téléphones</div></div>
-    <div class="hero-stat"><div class="number">127</div><div class="label">Mobiles</div></div>
-    <div class="hero-stat"><div class="number">227</div><div class="label">Certifiés RGE</div></div>
-    <div class="hero-stat"><div class="number">316</div><div class="label">Assurance RC</div></div>
-  </div>
-  <div style="color:#78909c; font-size:0.8em;">7 sources · CAPEB · Qualibat · QualiENR · Qualifelec · INSEE · Sites web · LinkedIn</div>
+  <h1>Base Artisans BTP &mdash; Département <span>92</span></h1>
+  <p class="subtitle">578 artisans | 47% avec mobile | 39% RGE | 54% assurance identifiée</p>
+  <p class="sample-note">Échantillon de 50 fiches représentatives sur 578</p>
 </div>
 
-<div style="padding:0 20px">
-  <div class="notice">
-    <strong>Extrait représentatif :</strong> Ces 50 fiches sont tirées uniformément sur l'ensemble des 589 disponibles (1 fiche sur 11) — pas cherry-pickées. La base complète a la même distribution de qualité. Score moyen ici : 71%.
-  </div>
-</div>
-
-<div class="section">
-  <h2>50 fiches <span>entièrement débloquées</span></h2>
-  <div class="grid" id="grid"></div>
-</div>
-
-<div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="mhead">
-      <h3 id="m-name"></h3>
-      <p id="m-loc"></p>
-      <button class="mclose" onclick="closeModal()">&#215;</button>
+<div class="grid-container">
+  <div class="grid">
+    
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CAPELEC</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 360deg, #2a2a4a 360deg);">
+          <span>100%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ANTONY (92160)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0146680974</span></div><div class="contact-row">📧 <span class="contact-value">contact@ste-capelec.fr</span></div><div class="contact-row">📧 <span class="contact-value">laure.cappel@capelec.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://capelec-electricite.fr" class="contact-link" target="_blank">capelec-electricite.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CAPPEL Laure M. CAPPEL Jérôme</div><div class="dir-linkedin"><a href="laure.cappel@capelec.com" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA</div>
+      <div class="card-financier">CA: 271837 · Effectif: 01 · PME</div>
     </div>
-    <div class="mbody" id="m-body"></div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">LUSISTORE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">NEUILLY SUR SEINE (92200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0950954532</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 62 38 62 08</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@lusistore.fr</span></div><div class="contact-row">📧 <span class="contact-value">frederic.pinto@lusistore.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">elisabeth.vuthan@lusistore.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.lusistore.fr" class="contact-link" target="_blank">www.lusistore.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PINTO Frédéric</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ AGENCEMENT, CHASSIS FIXES OU OUVRANTS, CLOISONS DE DOUBLAGE OU D'HABILLAGE/SEPARATIVES, DECORATION</div><div class="metier-acts">Agenceur, Menuisier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ABEILLE IARD</div>
+      <div class="card-financier">CA: 314000 · Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RONCAJOLI</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GARCHES (92380)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0147415063</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 07 58 70 57</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">marine.roncajoli@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">roncajoli.plomberie@orange.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.roncajoli-plomberie.fr" class="contact-link" target="_blank">www.roncajoli-plomberie.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 SEBEDIO Denis</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 1105141 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ADEBAT</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CLICHY (92110)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">07 57 10 90 94</span></div><div class="contact-row">📞 <span class="contact-value">01 49 65 93 13</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 57 10 90 94</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@adebat.fr</span></div><div class="contact-row">📧 <span class="contact-value">l.siclier@adebat.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">utilisateur@domaine.com</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">chauffage@adebat.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.adebat.fr/" class="contact-link" target="_blank">www.adebat.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LAURENT SICLIER &mdash; Président</div><div class="dir-linkedin"><a href="https://www.linkedin.com/in/ACwAABNc1BcBlKEGu0g_rIcxGmEEV3fnavSD6g8" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 4752A</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA FRANCE IARD</div>
+      <div class="card-financier">CA: 3383311 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CASTAING</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">MEUDON (92190)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">01 46 26 83 94</span></div><div class="contact-row">📧 <span class="contact-value">gpierru@castaing-depannage.fr</span></div><div class="contact-row">📧 <span class="contact-value">lderuelle@castaing-depannage.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@castaing-depannage.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">ppereira@castaing-depannage.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="http://www.castaing-depannage.fr/" class="contact-link" target="_blank">www.castaing-depannage.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LAURENT DERUELLE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMA BTP</div>
+      <div class="card-financier">CA: 1834181 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">TUNZINI</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">NANTERRE (92000)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">01 74 54 45 00</span></div><div class="contact-row">📞 <span class="contact-value">01 74 54 45 99</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 74 83 57 56</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">info@tunzini.fr</span></div><div class="contact-row">📧 <span class="contact-value">stephane.cortes@tunzini.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">accueil@tunzini.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="http://www.tunzini-paris.fr/" class="contact-link" target="_blank">www.tunzini-paris.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CLAUDE FATH</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMA SA</div>
+      <div class="card-financier">CA: 65791601 · Effectif: 22 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SERRUTIM</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GENNEVILLIERS (92230)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">01 47 98 03 06</span></div><div class="contact-row">📞 <span class="contact-value">01 47 99 33 96</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 86 57 92 86</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@serrutim.fr</span></div><div class="contact-row">📧 <span class="contact-value">aalves@serrutim.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="http://www.serrutim.fr/" class="contact-link" target="_blank">www.serrutim.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Antonio ALVES</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuiserie métallique, serrurerie</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 920004 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RODRIGUES</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">MEUDON (92190)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">ribeirorodrigues@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">sarlrodrigues@hotmail.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="http://www.sarl-rodrigues.com/" class="contact-link" target="_blank">www.sarl-rodrigues.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Manuel RODRIGUES &mdash; Associé gérant</div><div class="dir-linkedin"><a href="https://www.linkedin.com/in/ACwAACBkYVABL9hzjBnRDtTKPlf7jRgWOk87BFU" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuiserie bois</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">CA: 1211932 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">C J M ENTREPRISE GENERALE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">01 47 89 93 45</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 18 92 51 33</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">cjm@cjm.fr</span></div><div class="contact-row">📧 <span class="contact-value">cy@cjm.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">email@nomdedomaine.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.cjm.fr" class="contact-link" target="_blank">www.cjm.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JOSEPH YAMMINE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AUXILIAIRE</div>
+      <div class="card-financier">CA: 6499547 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ERF ENERGY</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VINCENNES (92320)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0650451860</span></div><div class="contact-row">📧 <span class="contact-value">erfenergy@gmail.com</span></div><div class="contact-row">🌐 <a href="http://www.erfenergy.fr/" class="contact-link" target="_blank">www.erfenergy.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ALEXIS MERABET</div><div class="dir-linkedin"><a href="http://www.linkedin.com/in/alexis-merabet-185682264" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : ERGO FRANCE</div>
+      <div class="card-financier">Effectif: 00 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENT DUYCK</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">RUEIL MALMAISON (92500)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0984322395</span></div><div class="contact-row">📞 <span class="contact-value">03 90 13 92 11</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">09 84 32 23 95</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 46 47 46 32</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 13 96 66 66</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">sylvainduyck@hotmail.com</span></div><div class="contact-row">🌐 <a href="https://www.sylvain-duyck.fr" class="contact-link" target="_blank">www.sylvain-duyck.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DUYCK SYLVAIN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENTREPRISE LEVESQUE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BOULOGNE BILLANCOURT (92100)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0141410213</span></div><div class="contact-row">📞 <span class="contact-value">01 41 41 02 13</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">vincent@entreprise-levesque.com</span></div><div class="contact-row">🌐 <a href="https://www.entreprise-levesque.com" class="contact-link" target="_blank">www.entreprise-levesque.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 VINCENT REYE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Serrurier - Métallier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SARL MAISON INNOVANTE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PUTEAUX (92800)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">08 20 95 53 70</span></div><div class="contact-row">📧 <span class="contact-value">contact@maison-innovante.com</span></div><div class="contact-row">🌐 <a href="http://www.maison-innovante.com/" class="contact-link" target="_blank">www.maison-innovante.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Saramfarz Mohamed Munsoor</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 4789Z</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : ERGO VERSICHERUNG</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">IPE  DEGLANE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ISSY LES MOULINEAUX (92130)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 07 88 81 65</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">ipedeglane@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">ipedeglane92@gmail.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.ipe.issy.com" class="contact-link" target="_blank">www.ipe.issy.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Georges DEGLANE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuiserie métallique, serrurerie</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">CA: 989789 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ACORUS - TECHNIBAT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GENNEVILLIERS (92230)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">Info@groupe-Acorus.fr</span></div><div class="contact-row">📧 <span class="contact-value">philippe.benquet@groupe-acorus.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.technibat.com" class="contact-link" target="_blank">www.technibat.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Philippe BENQUET</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Construction de bâtiments</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 30488156 · Effectif: 22 · ETI</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SMARTCOM SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">FONTENAY-AUX-ROSES (92260)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0760409780</span></div><div class="contact-row">📧 <span class="contact-value">smartcomservices.gestion@gmail.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 KAHENA OUALLI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 3320D</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : ERGO FRANCE</div>
+      <div class="card-financier">CA: 619657 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">WELLCOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">MEUDON (92360)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">07 67 28 39 00</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 67 28 39 00</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">l.droulers@dometvie.fr</span></div><div class="contact-row">🌐 <a href="https://www.dometvie.fr/stores/issy-les-moulineaux/" class="contact-link" target="_blank">www.dometvie.fr/stores/issy-les-moulineaux</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DROULERS LAURENT</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">IDEX ENERGIES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BOULOGNE BILLANCOURT (92100)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">01 47 12 42 12</span></div><div class="contact-row">📞 <span class="contact-value">04 80 69 55 51</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@idex.fr</span></div><div class="contact-row">📧 <span class="contact-value">benjamin.fremaux@idex.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">communication@idex.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.idex.fr/" class="contact-link" target="_blank">www.idex.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Benjamin FREMAUX</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 33.11Z</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">TECNISENS</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">RUEIL MALMAISON (92500)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0147109370</span></div><div class="contact-row">🌐 <a href="https://www.hydrotech-plomberie-rueil.fr" class="contact-link" target="_blank">www.hydrotech-plomberie-rueil.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MALLEJAC MANUEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE ENERGIE SERVICES - DR - NICE - COTE - D'AZUR</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LA GARENNE-COLOMBES (92250)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 20 52 86 67</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">philippe.lutman@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.engie.com" class="contact-link" target="_blank">www.engie.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PHILIPPE LUTMAN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 3530Z</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA ASSURANCES IARD FR</div>
+      <div class="card-financier">CA: 52830000 · Effectif: 53 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0685675717</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">veronique.silly@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.engiehomeservices.com" class="contact-link" target="_blank">www.engiehomeservices.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : XL INSURANCE FR</div>
+      <div class="card-financier">CA: 1948800 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">montdemarsan.homeservices@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.engie-homeservices.fr" class="contact-link" target="_blank">www.engie-homeservices.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : XL INSURANCE FR</div>
+      <div class="card-financier">CA: 1675100 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">ehs-administratif-nordest@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://engie-homeservices.fr" class="contact-link" target="_blank">engie-homeservices.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA CSA XFR</div>
+      <div class="card-financier">CA: 3780000 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 73 85 88 20</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">bordeaux-rivedroite.homeservices@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.engie-homeservices.fr" class="contact-link" target="_blank">www.engie-homeservices.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD XFR</div>
+      <div class="card-financier">CA: 4005400 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 61 70 03 36</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">dtr4.homeservices@engie.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.engie-homeservices.fr" class="contact-link" target="_blank">www.engie-homeservices.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MAUD BOURGEAIS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA FRANCE IARD</div>
+      <div class="card-financier">CA: 4420900 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ESPACE AMENAGEMENT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">RUEIL-MALMAISON (92500)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0616329408</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@espace-amenagement.fr</span></div><div class="contact-row">📧 <span class="contact-value">compta@espace-amenagement.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Jean-Marc CANTRELLE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de plâtrerie</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP C</div>
+      <div class="card-financier">CA: 3063816 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">GREEN HOME ENERGY</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHATILLON (92320)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0665969053</span></div><div class="contact-row">📧 <span class="contact-value">Greenhome.energy@yahoo.com</span></div><div class="contact-row">🌐 <a href="http://www.greenhomeenergy.fr/" class="contact-link" target="_blank">www.greenhomeenergy.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Nabil BOUGUERMOUH</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 3320D</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : MIC</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SOSEN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COLOMBES (92700)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">contact@sosen.fr</span></div><div class="contact-row">🌐 <a href="https://www.sosen.fr/" class="contact-link" target="_blank">www.sosen.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FORMET VINCENT</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 71.12B</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AFCN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GENNEVILLIERS (92230)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 66 19 98 19</span></div><div class="contact-row">📞 <span class="contact-value">09 72 29 84 31</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">01 87 44 26 98</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@af-constructionsnouvelles.fr</span></div><div class="contact-row">🌐 <a href="http://www.constructions-nouvelles.fr/" class="contact-link" target="_blank">www.constructions-nouvelles.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Mikael Benamara</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Construction de bâtiments</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RAVAL DECO</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LE PLESSIS ROBINSON (92350)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0146562120</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MAIROS Rui</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">JC VILAR</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">NANTERRE (92000)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0147218434</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 VILAR Jose</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Vitrier, Revêtement de sol, Peintre intérieur, Peintre extérieur</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SHPC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LA GARENNE COLOMBES (92250)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0147840424</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 HENRIO STEPHANE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MARC ALBERT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PUTEAUX (92800)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0147764966</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENICHOU  MARC ALBERT</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN COURANT ELECTRIQUE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SANITAIRE QUALITE SERVICE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ASNIERES SUR SEINE (92600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0953441228</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 HUYGHUES DESPOINTES  ADRIEN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DOUMER ELECTRICITE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LEVALLOIS PERRET (92300)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0141035351</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 TECHER GUILLAUME</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ACPI</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CLICHY (92110)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0155468957</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DA SILVA SANTOS Antonio</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plâtrier</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">R M SARL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SEVRES (92310)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0143989170</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RODRIGUES Elodie</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ESL FREGUIN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CLAMART (92140)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0146382415</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FREGUIN Jean-Marc</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0762972179</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">fabienne.merite@engie.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JEAN-LUC VANDENBROUCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 4605000 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 73 85 88 20</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">herve.hias@engie.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Yanick BIGAUD</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA ASSURANCES IARD XFR</div>
+      <div class="card-financier">CA: 1324490 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">veronique.silly@engie.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA ASSURANCES IARD FR</div>
+      <div class="card-financier">CA: 4965900 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENGIE HOME SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">fabienne.merite@engie.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENOIT PONS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA ASSURANCES IARD XFR</div>
+      <div class="card-financier">CA: 1997000 · Effectif: 51 · GE</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SAPIAN FEYTIAT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PUTEAUX (92800)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 49 19 73 35</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">jerome.darracq@sapian.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Jerome DERRACQ</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : Site</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : GENERALI IARD AR</div>
+      <div class="card-financier">CA: 4308000 · Effectif: 42 · ETI</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ARAD BATIMENT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHATENAY-MALABRY (92290)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0628033009</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">sorin.banu@orange.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Sorin BANU</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de plâtrerie</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">CA: 745988 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">THERM INNOV</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHATENAY-MALABRY (92290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 22 90 52 66</span></div><div class="contact-row">🌐 <a href="http://www.therminnov.com/" class="contact-link" target="_blank">www.therminnov.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Slim Hersi</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : QBE INSURANCE EUROPE LIMITED (Paris)</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SIRIUS TECHNOLOGIES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CLAMART (92140)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0651941454</span></div><div class="contact-row">📧 <span class="contact-value">contact@siriustechnologies-enr.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ILYASS ADDOUM</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ECOGROUP</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">COURBEVOIE (92400)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 17 22 18 68</span></div><div class="contact-row">📞 <span class="contact-value">01 85 09 74 06</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">info@ageelity.com</span></div><div class="contact-row">🌐 <a href="http://ageelity.fr/" class="contact-link" target="_blank">ageelity.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Raphael Sitbon</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux d'isolation</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BATYNERGIE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BOULOGNE BILLANCOURT (92100)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0971074633</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GABRIEL RIBOH</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ECO CLIMAT ENERGIE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ASNIERES-SUR-SEINE (92600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">08 05 13 00 20</span></div><div class="contact-row">📧 <span class="contact-value">ecoclimatenergie@gmail.com</span></div><div class="contact-row">🌐 <a href="http://www.ecoclimatenergie.fr/" class="contact-link" target="_blank">www.ecoclimatenergie.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Lior Trojman</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux d'isolation</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DANILA</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GARCHES (92380)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0606624016</span></div><div class="contact-row">📧 <span class="contact-value">danilasarl@yahoo.fr</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GABRIEL VALENTIN DANILA (DANILA)</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Construction de maisons</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
   </div>
 </div>
 
-<div class="cta">
-  <h2>Les 589 fiches du 92 ?</h2>
-  <p>376 emails &middot; 380 t&eacute;l&eacute;phones &middot; 227 certifi&eacute;s RGE &middot; 316 assurances RC identifi&eacute;es</p>
-  <a href="mailto:paul@growth-factory.fr?subject=Base artisans 92 - Demande de tarif">Demander le tarif complet</a>
+<div class="footer">
+  <p>Cet échantillon contient 50 fiches sur 578 dans le département 92.</p>
+  <p class="email"><a href="mailto:paul@growth-factory.fr">paul@growth-factory.fr</a></p>
 </div>
 
-<script>
-var S = [{"nom_entreprise":"CAPELEC","siret":"53190031400018","forme_juridique":"SARL","code_ape":"4321A","date_creation":"2011-04-01","telephone":"0146680974","email_generique":"contact@ste-capelec.fr","email_dirigeant":"laure.cappel@capelec.com","site_web":"capelec-electricite.fr","adresse":"146 B AV FRANCOIS MÔLE","code_postal":"92160","ville":"ANTONY","dirigeant_nom_complet":"CAPPEL Laure M. CAPPEL Jérôme","dirigeant_telephone":"","specialite":"ALIMENTATION EN COURANT ELECTRIQUE|ASCENSEURS, MONTE-CHARGE|DETECTION D'ALARME|ECLAIRAGE|ECLAIRAGE DE SECURITE|ELECTRICITE|EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS|EQUIPEMENTS DE TELECOMMUNICATION|EQUIPEMENTS ELECTRIQUES DE SECURITE|INSTALLATION ELECTRIQUE","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"271837","nb_salaries":"1-2","solvabilite":"","assurance_rc":"MMA","assurance_dc":"MMA","nb_sources":"3","score_completude":"100","sources":"capeb|qualifelec|api_sirene"},{"nom_entreprise":"AGANI ELEC","siret":"80138183100024","forme_juridique":"SASU","code_ape":"4321A","date_creation":"2014-03-14","telephone":"0142701772","email_generique":"aganielec@gmail.com","email_dirigeant":"noel@aganielec.com","site_web":"http://www.aganielec.com/","adresse":"1 RUE ALFRED COUILLARD","code_postal":"92110","ville":"CLICHY","dirigeant_nom_complet":"AGANI NOEL","dirigeant_telephone":"06 80 95 80 34","specialite":"ALIMENTATION EN COURANT ELECTRIQUE|ASCENSEURS, MONTE-CHARGE|DETECTION D'ALARME|ECLAIRAGE|ECLAIRAGE DE SECURITE|ELECTRICITE|EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS|EQUIPEMENTS DE TELECOMMUNICATION|EQUIPEMENTS ELECTRIQUES DE SECURITE|INSTALLATION ELECTRIQUE","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"BPCE IARD","assurance_dc":"BPCE IARD","nb_sources":"4","score_completude":"91","sources":"capeb|qualifelec|api_sirene|website"},{"nom_entreprise":"GASOLEC","siret":"79223781000025","forme_juridique":"SAS","code_ape":"4322B","date_creation":"02/04/2013","telephone":"0157630303","email_generique":"serviceclient@gasolec.net","email_dirigeant":"admin@gasolec.net","site_web":"www.contrat-entretien-chaudiere.net","adresse":"58 RUE VOTLAIRE","code_postal":"92240","ville":"MALAKOFF","dirigeant_nom_complet":"HOUAS MOHAMMED","dirigeant_telephone":"06 82 28 91 79","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"690879","nb_salaries":"9 salariés","solvabilite":"","assurance_rc":"BPCE IARD","assurance_dc":"","nb_sources":"3","score_completude":"91","sources":"capeb|qualibat|api_sirene"},{"nom_entreprise":"RENAISSANCE","siret":"88997795500018","forme_juridique":"SASU","code_ape":"4321A","date_creation":"2020-10-08","telephone":"0185741960","email_generique":"contact@renaissance-confort.fr","email_dirigeant":"","site_web":"","adresse":"8 RUE GASTON LATOUCHE","code_postal":"92210","ville":"ST CLOUD","dirigeant_nom_complet":"HARINTE PASCAL","dirigeant_telephone":"","specialite":"ALIMENTATION EN COURANT ELECTRIQUE|ASCENSEURS, MONTE-CHARGE|DETECTION D'ALARME|ECLAIRAGE|ECLAIRAGE DE SECURITE|ELECTRICITE|EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS|EQUIPEMENTS DE TELECOMMUNICATION|EQUIPEMENTS ELECTRIQUES DE SECURITE|INSTALLATION ELECTRIQUE","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"ERGO FRANCE","assurance_dc":"ERGO FRANCE","nb_sources":"3","score_completude":"86","sources":"capeb|qualifelec|api_sirene"},{"nom_entreprise":"AMENAGEMENT-BATIMENT-RENOVATION","siret":"48971923700013","forme_juridique":"5499","code_ape":"4334Z","date_creation":"15/02/2006","telephone":"06 97 24 94 41","email_generique":"","email_dirigeant":"abr-renov@orange.fr","site_web":"www.abr-renovation.com","adresse":"41 RUE ROBERT SCHUMAN 92700 COLOMBES","code_postal":"92700","ville":"COLOMBES","dirigeant_nom_complet":"Abdelbaki FETHI","dirigeant_telephone":"06 03 87 38 93","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"770000","nb_salaries":"10 salariés","solvabilite":"4","assurance_rc":"AXA ASSURANCES IARD","assurance_dc":"","nb_sources":"4","score_completude":"82","sources":"qualibat|linkedin|api_sirene|website"},{"nom_entreprise":"AGETI","siret":"48744934000024","forme_juridique":"5499","code_ape":"4329B","date_creation":"02/12/2005","telephone":"06 60 10 37 67","email_generique":"ageti92@yahoo.fr","email_dirigeant":"ageti92@yahoo.fr","site_web":"www.ageti92.fr","adresse":"26 RUE LEON MAURICE NORDMANN 92250 LA GARENNE-COLOMBES","code_postal":"92250","ville":"LA GARENNE-COLOMBES","dirigeant_nom_complet":"Norbert OJARDIAS","dirigeant_telephone":"06 60 10 31 67","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"534788","nb_salaries":"4 salariés","solvabilite":"4","assurance_rc":"AXA ASSURANCES IARD","assurance_dc":"","nb_sources":"3","score_completude":"82","sources":"qualibat|api_sirene|website"},{"nom_entreprise":"ACDP","siret":"42475104800036","forme_juridique":"5599","code_ape":"4322B","date_creation":"25/10/1999","telephone":"01 47 50 54 61","email_generique":"acdp92@free.fr","email_dirigeant":"acdp92accueil@free.fr","site_web":"http://www.chauffage-acdp-chaville.com/","adresse":"1730 AVENUE ROGER SALENGRO 92370 CHAVILLE","code_postal":"92370","ville":"CHAVILLE","dirigeant_nom_complet":"JEAN LOUIS PIRES","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"1299296","nb_salaries":"10 salariés","solvabilite":"4","assurance_rc":"MAAF","assurance_dc":"","nb_sources":"3","score_completude":"82","sources":"qualibat|api_sirene|website"},{"nom_entreprise":"AVENENCE","siret":"42365341900030","forme_juridique":"5499","code_ape":"4322B","date_creation":"23/06/1999","telephone":"01 58 88 06 19","email_generique":"contact@avenence.fr","email_dirigeant":"nathalie.gras@avenence.fr","site_web":"avenence-france.fr","adresse":"8 AVENUE DU PETIT CLAMART 92140 CLAMART","code_postal":"92140","ville":"CLAMART","dirigeant_nom_complet":"Sophie VARIS","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"2111561","nb_salaries":"18 salariés","solvabilite":"4","assurance_rc":"AXA FRANCE IARD","assurance_dc":"","nb_sources":"3","score_completude":"82","sources":"qualibat|api_sirene|website"},{"nom_entreprise":"ATHENA BATIMENT","siret":"82071778300022","forme_juridique":"5710","code_ape":"4399C","date_creation":"2016-05-30","telephone":"0665975644","email_generique":"athenabatiment@yahoo.com","email_dirigeant":"","site_web":"http://www.athenabatiment.fr/","adresse":"56 RUE PIERRE GEOFROIX","code_postal":"92700","ville":"COLOMBES","dirigeant_nom_complet":"REUNAN LAGADEC","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"MAAF","assurance_dc":"MAAF","nb_sources":"3","score_completude":"82","sources":"qualifelec|api_sirene|website"},{"nom_entreprise":"VASSEUR FENETRES","siret":"34916076200044","forme_juridique":"SARL","code_ape":"43.32A","date_creation":"1989-01-01","telephone":"0147247647","email_generique":"contact@vasseurfenetres.fr","email_dirigeant":"","site_web":"www.vasseur-fenetres.fr","adresse":"150 BD NATIONAL","code_postal":"92000","ville":"NANTERRE","dirigeant_nom_complet":"VASSEUR   DELPHINE & OROVAL SEBASTIEN","dirigeant_telephone":"06 41 34 96 79","specialite":"","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"77","sources":"capeb|api_sirene|website"},{"nom_entreprise":"PLOMBIX","siret":"41391435900034","forme_juridique":"SARL","code_ape":"43.22A","date_creation":"1997-10-06","telephone":"0146045378","email_generique":"plombix92@gmail.com","email_dirigeant":"","site_web":"www.plombix.com","adresse":"20 RUE ESNAULT PELTERIE","code_postal":"92100","ville":"BOULOGNE BILLANCOURT","dirigeant_nom_complet":"PELTIER ROBIN","dirigeant_telephone":"","specialite":"ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE|ALIMENTATION EN EAU|ALIMENTATION EN GAZ|APPAREILS SANITAIRES|CHAUDIERES GAZ OU FIOUL|CHAUFFAGE GAZ OU FIOUL|CITERNE EXTERIEURE GAZ|CLIMATISATION|CONDUITS DE FUMEE|DESCENTES ET COLLECTES DES EAUX PLUVIALES","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"77","sources":"capeb|api_sirene|website"},{"nom_entreprise":"S3J","siret":"41864161900014","forme_juridique":"5499","code_ape":"4120A","date_creation":"06/05/1998","telephone":"","email_generique":"contact@s-3-j.fr","email_dirigeant":"contact@s-3-j.fr","site_web":"www.s3j.eu","adresse":"7 RUE DU MONTOIR 92140 CLAMART","code_postal":"92140","ville":"CLAMART","dirigeant_nom_complet":"Joachim REIS","dirigeant_telephone":"06 12 29 21 26","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"1475919","nb_salaries":"6 salariés","solvabilite":"","assurance_rc":"AXA FRANCE IARD","assurance_dc":"","nb_sources":"3","score_completude":"77","sources":"qualibat|api_sirene|website"},{"nom_entreprise":"IPE  DEGLANE","siret":"91299399500014","forme_juridique":"5710","code_ape":"4332B","date_creation":"01/04/2022","telephone":"","email_generique":"ipedeglane@orange.fr","email_dirigeant":"ipedeglane92@gmail.com","site_web":"www.ipe.issy.com","adresse":"23 B RUE DANTON 92130 ISSY LES MOULINEAUX","code_postal":"92130","ville":"ISSY LES MOULINEAUX","dirigeant_nom_complet":"Georges DEGLANE","dirigeant_telephone":"06 07 88 81 65","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"989789","nb_salaries":"6 salariés","solvabilite":"","assurance_rc":"MAAF","assurance_dc":"","nb_sources":"2","score_completude":"77","sources":"qualibat|api_sirene"},{"nom_entreprise":"ACORUS - TECHNIBAT","siret":"40911373500032","forme_juridique":"5710","code_ape":"4120B","date_creation":"12/02/1997","telephone":"","email_generique":"Info@groupe-Acorus.fr","email_dirigeant":"philippe.benquet@groupe-acorus.fr","site_web":"www.technibat.com","adresse":"133 AVENUE LOUIS ROCHE 92230 GENNEVILLIERS","code_postal":"92230","ville":"GENNEVILLIERS","dirigeant_nom_complet":"Philippe BENQUET","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"30488156","nb_salaries":"165 salariés","solvabilite":"5","assurance_rc":"SMABTP","assurance_dc":"","nb_sources":"2","score_completude":"77","sources":"qualibat|api_sirene"},{"nom_entreprise":"SMARTCOM SERVICES","siret":"88912006900022","forme_juridique":"5710","code_ape":"3320D","date_creation":"2020-09-15","telephone":"0760409780","email_generique":"smartcomservices.gestion@gmail.com","email_dirigeant":"","site_web":"","adresse":"51 RUE MARX DORMOY","code_postal":"92260","ville":"FONTENAY-AUX-ROSES","dirigeant_nom_complet":"KAHENA OUALLI","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"619657","nb_salaries":"3-5","solvabilite":"","assurance_rc":"ERGO FRANCE","assurance_dc":"ERGO FRANCE","nb_sources":"2","score_completude":"77","sources":"qualifelec|api_sirene"},{"nom_entreprise":"P.R.I","siret":"49147341900027","forme_juridique":"SARL","code_ape":"43.34Z","date_creation":"2006-09-10","telephone":"0147822805","email_generique":"priravalement@yahoo.fr","email_dirigeant":"","site_web":"www.pri92.com","adresse":"22 RUE SADI CARNOT","code_postal":"92000","ville":"NANTERRE","dirigeant_nom_complet":"ALIOUI MEHDI","dirigeant_telephone":"","specialite":"Ravalement de façades en rénovation","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"73","sources":"capeb|api_sirene|website"},{"nom_entreprise":"RENOVAIR GENIE CLIMATIQUE","siret":"35374880900038","forme_juridique":"5710","code_ape":"4322B","date_creation":"1990-01-01","telephone":"01 55 48 00 80","email_generique":"contact@renovair.com","email_dirigeant":"","site_web":"http://www.renovair-clima.com/","adresse":"32 RUE PIERRE SEMARD 92320 CHATILLON","code_postal":"92320","ville":"CHATILLON","dirigeant_nom_complet":"","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"","qualienr":"oui","qualifelec":"","chiffre_affaires":"","nb_salaries":"10-19","solvabilite":"","assurance_rc":"ALLIANZ IARD (Paris)","assurance_dc":"ALLIANZ IARD (Paris)","nb_sources":"3","score_completude":"73","sources":"qualienr|api_sirene|website"},{"nom_entreprise":"ELLIT","siret":"48300866000043","forme_juridique":"EURL","code_ape":"43.99A","date_creation":"2005-07-01","telephone":"0141113010","email_generique":"","email_dirigeant":"","site_web":"www.ellit.fr","adresse":"194 AVENUE DES GRESILLONS","code_postal":"92600","ville":"ASNIERES SUR SEINE","dirigeant_nom_complet":"BOUNOUAR FAOUZI","dirigeant_telephone":"","specialite":"ASSAINISSEMENT DU TERRAIN-DRAINAGE|AUVENT-BALCON (MACONNERIE)|BETON ARME|CHAINAGES|CHEMINEES A FOYER OUVERT|CLOTURES|CONDUITS DE FUMEE|CUVELAGE|DALLAGE|ESCALIERS ELEMENTS DE STRUCTURE","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"6-9","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"capeb|api_sirene"},{"nom_entreprise":"CARREIRA","siret":"37765075900048","forme_juridique":"5499","code_ape":"4399C","date_creation":"02/04/1990","telephone":"","email_generique":"carreira@wanadoo.fr","email_dirigeant":"carreira@wanadoo.fr","site_web":"","adresse":"56 AVENUE HENRI BARBUSSE 92140 CLAMART","code_postal":"92140","ville":"CLAMART","dirigeant_nom_complet":"Manuel SOARES","dirigeant_telephone":"0612717984","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"3603960","nb_salaries":"16 salariés","solvabilite":"6","assurance_rc":"AXA ASSURANCES IARD","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"SERRURERIE LBR","siret":"89981208500012","forme_juridique":"5710","code_ape":"4332B","date_creation":"29/05/2021","telephone":"","email_generique":"","email_dirigeant":"serrurerielbr@gmail.com","site_web":"www.serrurerielbr.com","adresse":"3 T RUE DU VAL CONTENT 92260 FONTENAY-AUX-ROSES","code_postal":"92260","ville":"FONTENAY-AUX-ROSES","dirigeant_nom_complet":"BILALY DIABIRA","dirigeant_telephone":"06 59 30 57 43","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"210000","nb_salaries":"2 salariés","solvabilite":"","assurance_rc":"BPCE IARD","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"ENGIE HOME SERVICES","siret":"30134058407025","forme_juridique":"5710","code_ape":"4322B","date_creation":"01/01/1974","telephone":"","email_generique":"","email_dirigeant":"dtr4.homeservices@engie.com","site_web":"www.engie-homeservices.fr","adresse":"1 PLACE SAMUEL DE CHAMPLAIN 92400 COURBEVOIE","code_postal":"92400","ville":"COURBEVOIE","dirigeant_nom_complet":"CAROLINE GUEDON","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"3090000","nb_salaries":"30 salariés","solvabilite":"","assurance_rc":"AXA ASSURANCES IARD","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"ALFORT-CHAUFFAGE-PLOMBERIE-COUVERTURE","siret":"34812725900052","forme_juridique":"5710","code_ape":"4322A","date_creation":"07/06/1988","telephone":"","email_generique":"acpc@acpcsas.fr","email_dirigeant":"acpc@acpcsas.fr","site_web":"","adresse":"49 AVENUE VICTOR HUGO 92170 VANVES","code_postal":"92170","ville":"VANVES","dirigeant_nom_complet":"Jean-pierre RAINAUD","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"66008097","nb_salaries":"149 salariés","solvabilite":"3","assurance_rc":"SMABTP","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"ARCADES COUVERTURE","siret":"88490243800016","forme_juridique":"5499","code_ape":"4391A","date_creation":"29/06/2020","telephone":"","email_generique":"contact@arcades-couvertures.fr","email_dirigeant":"m.philippe@arcades-couverture.fr","site_web":"","adresse":"5 B AVENUE GABRIELLE 92500 RUEIL-MALMAISON","code_postal":"92500","ville":"RUEIL-MALMAISON","dirigeant_nom_complet":"MATTHIEU","dirigeant_telephone":"06 64 24 36 96","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"2452303","nb_salaries":"9 salariés","solvabilite":"4","assurance_rc":"GAN","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"C.P.I","siret":"50089385400025","forme_juridique":"5499","code_ape":"4331Z","date_creation":"14/11/2007","telephone":"","email_generique":"contact@societe-cpi.fr","email_dirigeant":"enaaman@societe-cpi.fr","site_web":"","adresse":"6 RUE VICTOR BASCH 92120 MONTROUGE","code_postal":"92120","ville":"MONTROUGE","dirigeant_nom_complet":"ENAAMAN MOKHTAR","dirigeant_telephone":"0614327093","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"3916800","nb_salaries":"25 salariés","solvabilite":"6","assurance_rc":"SMABTP C","assurance_dc":"","nb_sources":"2","score_completude":"73","sources":"qualibat|api_sirene"},{"nom_entreprise":"FRANCE ECO RENOV","siret":"85226368000021","forme_juridique":"5710","code_ape":"4120A","date_creation":"2019-06-20","telephone":"0613665243","email_generique":"direction.ecorenov@gmail.com","email_dirigeant":"","site_web":"","adresse":"30 Rue de l'industrie","code_postal":"92500","ville":"MORAINVILLIERS","dirigeant_nom_complet":"Nassim AITIMIJJA","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"QBE","assurance_dc":"QBE","nb_sources":"2","score_completude":"73","sources":"qualifelec|api_sirene"},{"nom_entreprise":"SOSEN","siret":"95111298600017","forme_juridique":"SASU","code_ape":"71.12B","date_creation":"2023-03-23","telephone":"","email_generique":"contact@sosen.fr","email_dirigeant":"","site_web":"https://www.sosen.fr/","adresse":"33 BD DE VALMY","code_postal":"92700","ville":"COLOMBES","dirigeant_nom_complet":"FORMET VINCENT","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"68","sources":"capeb|api_sirene|website"},{"nom_entreprise":"I-D PAC","siret":"87822872500023","forme_juridique":"5710","code_ape":"4322B","date_creation":"2019-10-02","telephone":"06 13 25 37 10","email_generique":"contact@i-dpac.fr","email_dirigeant":"","site_web":"http://www.i-dpac.fr/","adresse":"4 AVENUE LAURENT CELY 92600 ASNIERES-SUR-SEINE","code_postal":"92600","ville":"ASNIERES-SUR-SEINE","dirigeant_nom_complet":"Nasser Ayachi","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"","qualienr":"oui","qualifelec":"","chiffre_affaires":"","nb_salaries":"10-19","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"68","sources":"qualienr|api_sirene|website"},{"nom_entreprise":"PIRES MICHAEL","siret":"49990997600015","forme_juridique":"EI","code_ape":"43.34Z","date_creation":"2007-09-10","telephone":"0143506746","email_generique":"","email_dirigeant":"","site_web":"","adresse":"BAT C - ESC 4","code_postal":"92140","ville":"CLAMART","dirigeant_nom_complet":"PIRES Michael","dirigeant_telephone":"","specialite":"MOQUETTE|PEINTURE REVETEMENT VITRERIE|PEINTURES EN LETTRES|REVETEMENTS DE PLAFONDS|REVETEMENTS MURAUX|VITRAGES EXTERIEURS|VITRAGES INTERIEURS","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"ADEC","siret":"37777405400052","forme_juridique":"EURL","code_ape":"43.32B","date_creation":"1990-04-02","telephone":"0147290700","email_generique":"","email_dirigeant":"","site_web":"","adresse":"60 RUE SADI CARNOT","code_postal":"92000","ville":"NANTERRE","dirigeant_nom_complet":"LASVESNE JOHANN","dirigeant_telephone":"","specialite":"CHARPENTE METALLIQUE|FERMETURES-OCCULTATIONS (METALLIQUE)|GARDE-CORPS EXTERIEURS (METALLIQUE)|GARDE-CORPS INTERIEURS (METALLIQUE)|MENUISERIE ALUMINIUM|PORTE DE GARAGE|SERRURERIE-FERRONERIE|STORES-FERMETURES METALLIQUES","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"FRANCE PEINTURE","siret":"79145870600029","forme_juridique":"SARL","code_ape":"43.34Z","date_creation":"2013-01-21","telephone":"0141189912","email_generique":"","email_dirigeant":"","site_web":"","adresse":"37 RUE DES MAZURIERES","code_postal":"92500","ville":"RUEIL MALMAISON","dirigeant_nom_complet":"HENNON YOANN","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"GAZ 1 PACTE","siret":"48802502400024","forme_juridique":"SARL","code_ape":"43.22B","date_creation":"2006-02-01","telephone":"0146499662","email_generique":"","email_dirigeant":"","site_web":"","adresse":"31 BD DE VERDUN","code_postal":"92400","ville":"COURBEVOIE","dirigeant_nom_complet":"BAYENCE Manuel","dirigeant_telephone":"","specialite":"ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE|ALIMENTATION EN EAU|ALIMENTATION EN GAZ|APPAREILS SANITAIRES|CHAUDIERES GAZ OU FIOUL|CHAUFFAGE GAZ OU FIOUL|CITERNE EXTERIEURE GAZ|CLIMATISATION|CONDUITS DE FUMEE|DESCENTES ET COLLECTES DES EAUX PLUVIALES","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"SOCIETE DE MENUISERIE GENERALE","siret":"75399199100013","forme_juridique":"EURL","code_ape":"43.32A","date_creation":"2012-09-30","telephone":"0611105800","email_generique":"","email_dirigeant":"","site_web":"","adresse":"39 AVENUE CHENARD ET WALCKER","code_postal":"92230","ville":"GENNEVILLIERS","dirigeant_nom_complet":"GRICHI AZZEDINE","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"PHILIPPE JACOB","siret":"53861889300019","forme_juridique":"SARL","code_ape":"43.32A","date_creation":"2011-12-07","telephone":"0147560801","email_generique":"","email_dirigeant":"","site_web":"","adresse":"5 RUE FERNAND PELLOUTIER","code_postal":"92110","ville":"CLICHY","dirigeant_nom_complet":"JACOB Philippe","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"AS BATIM","siret":"48827853200012","forme_juridique":"SASU","code_ape":"43.34Z","date_creation":"2006-01-19","telephone":"0146203941","email_generique":"","email_dirigeant":"","site_web":"","adresse":"36 RUE THIERS","code_postal":"92100","ville":"BOULOGNE BILLANCOURT","dirigeant_nom_complet":"ANDJELKOVIC Natasa","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"ERT ETUDES ET REALISATIONS TEC","siret":"42948616000022","forme_juridique":"SARL","code_ape":"43.22B","date_creation":"2000-02-01","telephone":"0146385686","email_generique":"","email_dirigeant":"","site_web":"","adresse":"20 RUE ANATOLE FRANCE","code_postal":"92130","ville":"ISSY LES MOULINEAUX","dirigeant_nom_complet":"RAULT PATRICK","dirigeant_telephone":"","specialite":"ALIMENTATION EN COURANT ELECTRIQUE|ASCENSEURS, MONTE-CHARGE|DETECTION D'ALARME|ECLAIRAGE|ECLAIRAGE DE SECURITE|ELECTRICITE|EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS|EQUIPEMENTS DE TELECOMMUNICATION|EQUIPEMENTS ELECTRIQUES DE SECURITE|INSTALLATION ELECTRIQUE","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"20-49","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"DESSYMOULIE PLOMBERIE CHAUFFAGE","siret":"78909482800017","forme_juridique":"SASU","code_ape":"43.22A","date_creation":"2012-11-01","telephone":"0146658474","email_generique":"","email_dirigeant":"","site_web":"","adresse":"1 AVENUE DES VERGERS","code_postal":"92340","ville":"BOURG LA REINE","dirigeant_nom_complet":"DESSYMOULIE BRUNO","dirigeant_telephone":"","specialite":"ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE|ALIMENTATION EN EAU|ALIMENTATION EN GAZ|APPAREILS SANITAIRES|CHAUDIERES GAZ OU FIOUL|CHAUFFAGE GAZ OU FIOUL|CITERNE EXTERIEURE GAZ|CLIMATISATION|CONDUITS DE FUMEE|DESCENTES ET COLLECTES DES EAUX PLUVIALES","is_rge":"oui","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"6-9","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"capeb|api_sirene"},{"nom_entreprise":"ENGIE HOME SERVICES","siret":"30134058402992","forme_juridique":"5710","code_ape":"4322B","date_creation":"01/01/1974","telephone":"","email_generique":"","email_dirigeant":"veronique.silly@engie.com","site_web":"","adresse":"1 PLACE SAMUEL DE CHAMPLAIN 92400 COURBEVOIE","code_postal":"92400","ville":"COURBEVOIE","dirigeant_nom_complet":"BENOIT PONS","dirigeant_telephone":"0685675717","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"1679300","nb_salaries":"12 salariés","solvabilite":"","assurance_rc":"AXA ASSURANCES IARD FR","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualibat|api_sirene"},{"nom_entreprise":"PROXISERVE","siret":"33487372602805","forme_juridique":"5710","code_ape":"4322B","date_creation":"01/01/1986","telephone":"","email_generique":"","email_dirigeant":"srivoal@proxiserve.fr","site_web":"","adresse":"155-159 155 RUE ANATOLE FRANCE 92300 LEVALLOIS-PERRET","code_postal":"92300","ville":"LEVALLOIS-PERRET","dirigeant_nom_complet":"SEBASTIEN RIVOAL","dirigeant_telephone":"06 18 62 78 25","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"594891","nb_salaries":"7 salariés","solvabilite":"","assurance_rc":"BHEI","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualibat|api_sirene"},{"nom_entreprise":"ENGIE HOME SERVICES","siret":"30134058407322","forme_juridique":"5710","code_ape":"4322B","date_creation":"01/01/1974","telephone":"","email_generique":"","email_dirigeant":"fabienne.merite@engie.com","site_web":"","adresse":"1 PLACE SAMUEL DE CHAMPLAIN 92400 COURBEVOIE","code_postal":"92400","ville":"COURBEVOIE","dirigeant_nom_complet":"BENOIT PONS","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"1997000","nb_salaries":"15 salariés","solvabilite":"","assurance_rc":"AXA ASSURANCES IARD XFR","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualibat|api_sirene"},{"nom_entreprise":"AIR 9","siret":"53531174000034","forme_juridique":"5710","code_ape":"4322B","date_creation":"01/11/2011","telephone":"","email_generique":"","email_dirigeant":"contact@air9ventilation.fr","site_web":"","adresse":"19 RUE DE LA LISETTE 92220 BAGNEUX","code_postal":"92220","ville":"BAGNEUX","dirigeant_nom_complet":"GUILLAUME LE BORGNE","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"1767095","nb_salaries":"8 salariés","solvabilite":"5","assurance_rc":"MIC INSURANCE","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualibat|api_sirene"},{"nom_entreprise":"COSMOS","siret":"31257428800055","forme_juridique":"5499","code_ape":"4333Z","date_creation":"01/08/2012","telephone":"","email_generique":"","email_dirigeant":"cosmos92250@gmail.com","site_web":"","adresse":"74 BOULEVARD DE LA REPUBLIQUE 92250 LA GARENNE-COLOMBES","code_postal":"92250","ville":"LA GARENNE-COLOMBES","dirigeant_nom_complet":"NATHALIE ANTON","dirigeant_telephone":"0609202986","specialite":"","is_rge":"oui","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"695966","nb_salaries":"6 salariés","solvabilite":"6","assurance_rc":"WAKAM AIBG","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualibat|api_sirene"},{"nom_entreprise":"MGR BH26","siret":"83238084400023","forme_juridique":"5710","code_ape":"4322B","date_creation":"2017-09-01","telephone":"06 17 32 55 70","email_generique":"emailcontact@mgr-bh26.fr","email_dirigeant":"","site_web":"http://www.mgr-bh26.fr/","adresse":"60 RUE DE LA BONGARDE 92390 VILLENEUVE-LA-GARENNE","code_postal":"92390","ville":"VILLENEUVE-LA-GARENNE","dirigeant_nom_complet":"Alain Benaroch","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"","qualienr":"oui","qualifelec":"","chiffre_affaires":"","nb_salaries":"3-5","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"68","sources":"qualienr|api_sirene"},{"nom_entreprise":"TWINELEC","siret":"94813592600012","forme_juridique":"5499","code_ape":"4321A","date_creation":"2023-01-04","telephone":"0749852728","email_generique":"mehdi.ah@hotmail.fr","email_dirigeant":"","site_web":"","adresse":"8 SQ DES CORBIERES","code_postal":"92160","ville":"ANTONY","dirigeant_nom_complet":"MEHDI AHMAMI","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"ERGO","assurance_dc":"ERGO FRANCE","nb_sources":"2","score_completude":"68","sources":"qualifelec|api_sirene"},{"nom_entreprise":"ENERGIA GROUP","siret":"90926828600020","forme_juridique":"5710","code_ape":"4322B","date_creation":"2022-01-13","telephone":"06 25 89 83 11","email_generique":"contact@energia-group.fr","email_dirigeant":"","site_web":"http://www.energia-group.fr/","adresse":"155 RUE ANATOLE FRANCE 92300 LEVALLOIS-PERRET","code_postal":"92300","ville":"LEVALLOIS-PERRET","dirigeant_nom_complet":"Jonathan Wizman","dirigeant_telephone":"","specialite":"","is_rge":"oui","qualibat":"","qualienr":"oui","qualifelec":"","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"3","score_completude":"64","sources":"qualienr|api_sirene|website"},{"nom_entreprise":"SMART LEAF","siret":"80838572800023","forme_juridique":"SARL","code_ape":"71.12B","date_creation":"2015-01-01","telephone":"","email_generique":"","email_dirigeant":"","site_web":"","adresse":"12 RUE RASPAIL","code_postal":"92270","ville":"BOIS COLOMBES","dirigeant_nom_complet":"SUKHA OLGA & ZAVROTSKYY ROMAN","dirigeant_telephone":"","specialite":"CLIMATISATION|PLOMBERIE CHAUFFAGE VENTILATION|SOLAIRE|VENTILATION","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"64","sources":"capeb|api_sirene"},{"nom_entreprise":"M ART IN RENOV","siret":"75239854500026","forme_juridique":"EI","code_ape":"43.33Z","date_creation":"2012-07-02","telephone":"","email_generique":"","email_dirigeant":"","site_web":"","adresse":"39 RUE DES BAS","code_postal":"92600","ville":"ASNIERES SUR SEINE","dirigeant_nom_complet":"MOSKAL LAURENCE","dirigeant_telephone":"","specialite":"AUVENT-BALCON (BOIS)|CHARPENTE BOIS|COUVERTURES (ARDOISE-TUILE-ZINC-FIBRE CIMENT)|ESCALIERS INTERIEURS|ETANCHEITE|MACONNERIE A OSSATURE BOIS|MENUISERIE CHARPENTE|PLANCHERS BOIS|POUTRES BOIS","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"1-2","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"64","sources":"capeb|api_sirene"},{"nom_entreprise":"SIGMA ISOLATION","siret":"88180959400016","forme_juridique":"SASU","code_ape":"43.29A","date_creation":"2020-02-06","telephone":"","email_generique":"","email_dirigeant":"","site_web":"","adresse":"22 SQUARE DE L AVRE","code_postal":"92100","ville":"BOULOGNE BILLANCOURT","dirigeant_nom_complet":"SADOUR ABOUBAKRE","dirigeant_telephone":"","specialite":"","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"10-19","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"64","sources":"capeb|api_sirene"},{"nom_entreprise":"CARDEM SECTEUR GEVREY","siret":"30389008100282","forme_juridique":"5710","code_ape":"43.11Z","date_creation":"30/12/2014","telephone":"","email_generique":"","email_dirigeant":"nicolas.masson@cardem.fr","site_web":"","adresse":"12-14 IMMEUBLE SEINE WAY 12 RUE LOUIS BLERIOT 92500 RUEIL-MALMAISON","code_postal":"92500","ville":"RUEIL-MALMAISON","dirigeant_nom_complet":"NICOLAS MASSON","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"oui","qualienr":"","qualifelec":"","chiffre_affaires":"5456000","nb_salaries":"21 salariés","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"64","sources":"qualibat|api_sirene"},{"nom_entreprise":"POWERZONE","siret":"92886535100011","forme_juridique":"5710","code_ape":"4321A","date_creation":"2024-05-16","telephone":"06 29 61 82 56","email_generique":"CONTACT.PWRZONE@GMAIL.COM","email_dirigeant":"","site_web":"","adresse":"15 RUE PIERRE BEREGOVOY","code_postal":"92110","ville":"CLICHY","dirigeant_nom_complet":"OUMAMA MARRAKCHI","dirigeant_telephone":"","specialite":"","is_rge":"","qualibat":"","qualienr":"","qualifelec":"oui","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"MIC","assurance_dc":"MIC INSURANCE","nb_sources":"2","score_completude":"64","sources":"qualifelec|api_sirene"},{"nom_entreprise":"ALUNORME","siret":"98053706200013","forme_juridique":"SAS","code_ape":"43.32A","date_creation":"2023-10-06","telephone":"","email_generique":"","email_dirigeant":"","site_web":"","adresse":"7 VILLA COUR CREUSE","code_postal":"92140","ville":"CLAMART","dirigeant_nom_complet":"CIARICU MIHAIL","dirigeant_telephone":"","specialite":"AUVENT-BALCON (BOIS)|CHARPENTE BOIS|COUVERTURES (ARDOISE-TUILE-ZINC-FIBRE CIMENT)|ESCALIERS INTERIEURS|ETANCHEITE|MACONNERIE A OSSATURE BOIS|MENUISERIE CHARPENTE|PLANCHERS BOIS|POUTRES BOIS","is_rge":"non","qualibat":"","qualienr":"","qualifelec":"","chiffre_affaires":"","nb_salaries":"","solvabilite":"","assurance_rc":"","assurance_dc":"","nb_sources":"2","score_completude":"59","sources":"capeb|api_sirene"}];
-function sc(v){ var n=parseFloat(v)||0; return n>=80?'#00b894':n>=60?'#f59e0b':'#ef4444'; }
-function g(v){ return (v&&v.trim())?v.trim():''; }
-function renderGrid(){
-  var grid=document.getElementById('grid');
-  S.forEach(function(s,i){
-    var score=Math.round(parseFloat(s.score_completude||0));
-    var tel=g(s.telephone)||'—';
-    var email=g(s.email_generique)||g(s.email_dirigeant)||'—';
-    var dir=g(s.dirigeant_nom_complet)||'—';
-    var badges='';
-    if(s.is_rge==='oui') badges+='<span class="badge br">&#10003; RGE</span>';
-    if(g(s.qualibat)) badges+='<span class="badge bb">Qualibat</span>';
-    if(g(s.qualienr)) badges+='<span class="badge bg">QualiENR</span>';
-    if(g(s.qualifelec)) badges+='<span class="badge bp">Qualifelec</span>';
-    if(g(s.assurance_rc)) badges+='<span class="badge bo">RC Pro</span>';
-    if(g(s.nb_sources)) badges+='<span class="badge bs">'+g(s.nb_sources)+' src</span>';
-    var spec=g(s.specialite)?'<div class="row"><span class="lbl">M&eacute;tier</span><span class="val">'+g(s.specialite)+'</span></div>':'';
-    grid.innerHTML+='<div class="card" onclick="openModal('+i+')">'
-      +'<div class="card-top"><div><span class="card-tag">D&eacute;bloqu&eacute;</span>'
-      +'<div class="card-name">'+g(s.nom_entreprise)+'</div>'
-      +'<div class="card-loc">&#128205; '+g(s.ville,'—')+' ('+g(s.code_postal,'—')+')</div></div>'
-      +'<div class="score" style="background:'+sc(s.score_completude)+'">'+score+'%</div></div>'
-      +'<div class="badges">'+badges+'</div>'
-      +'<div class="row"><span class="lbl">T&eacute;l.</span><span class="val'+(tel==='—'?' none':'')+'">'+tel+'</span></div>'
-      +'<div class="row"><span class="lbl">Email</span><span class="val'+(email==='—'?' none':'')+'">'+email+'</span></div>'
-      +'<div class="row"><span class="lbl">Dirigeant</span><span class="val'+(dir==='—'?' none':'')+'">'+dir+'</span></div>'
-      +spec+'</div>';
-  });
-}
-function openModal(i){
-  var s=S[i];
-  var score=Math.round(parseFloat(s.score_completude||0));
-  document.getElementById('m-name').textContent=g(s.nom_entreprise);
-  document.getElementById('m-loc').textContent=g(s.ville,'—')+' ('+g(s.code_postal,'—')+')';
-  var sections=[
-    {t:'Identit&eacute;',rows:[['SIRET',g(s.siret)],['Forme jur.',g(s.forme_juridique)],['Code APE',g(s.code_ape)],['Cr&eacute;ation',g(s.date_creation)],['Sp&eacute;cialit&eacute;',g(s.specialite)],['Compl&eacute;tude',score+'%'],['Sources',g(s.sources)]]},
-    {t:'Contact',rows:[['T&eacute;l&eacute;phone',g(s.telephone)],['Email entreprise',g(s.email_generique)],['Site web',g(s.site_web)]]},
-    {t:'Dirigeant',rows:[['Nom complet',g(s.dirigeant_nom_complet)],['Mobile',g(s.dirigeant_telephone)],['Email dirigeant',g(s.email_dirigeant)],['LinkedIn',g(s.linkedin)]]},
-    {t:'Financier &amp; INSEE',rows:[['CA',g(s.chiffre_affaires)],['Effectif',g(s.nb_salaries)],['Solvabilit&eacute;',g(s.solvabilite)]]},
-    {t:'Certifications &amp; Assurances',rows:[['RGE',s.is_rge==='oui'?'&#10003; Oui':'Non'],['Qualibat',g(s.qualibat)||'—'],['QualiENR',g(s.qualienr)||'—'],['Qualifelec',g(s.qualifelec)||'—'],['Assurance RC',g(s.assurance_rc)||'—'],['Assurance DC',g(s.assurance_dc)||'—']]}
-  ];
-  var html='';
-  sections.forEach(function(sec){
-    var rows=sec.rows.filter(function(r){return r[1]&&r[1]!=='—';});
-    if(!rows.length)return;
-    html+='<div class="msec"><div class="msec-title">'+sec.t+'</div>';
-    rows.forEach(function(r){html+='<div class="mrow"><span class="lbl">'+r[0]+'</span><span class="val">'+r[1]+'</span></div>';});
-    html+='</div>';
-  });
-  document.getElementById('m-body').innerHTML=html;
-  document.getElementById('modal-overlay').classList.add('active');
-}
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('active'); }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
-renderGrid();
-</script>
 </body>
 </html>
