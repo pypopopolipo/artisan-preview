@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base Artisans BTP — Département maclas</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0d0d1a; color: #e0e0e0; line-height: 1.6; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white; padding: 50px 40px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 2.4em; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero h1 span { color: #4fc3f7; }
+  .hero .subtitle { font-size: 1.05em; color: #90a4ae; margin-bottom: 6px; }
+  .hero .sample-note { font-size: 0.88em; color: #607d8b; margin-top: 12px; }
+
+  /* Grid */
+  .grid-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Cards */
+  .fiche-card {
+    background: #151528;
+    border: 1px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .fiche-card:hover {
+    border-color: #4fc3f7;
+    box-shadow: 0 4px 24px rgba(79,195,247,0.1);
+  }
+
+  .fiche-header {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;
+  }
+  .fiche-name {
+    font-size: 1.12em; font-weight: 800; color: #ffffff; line-height: 1.3; flex: 1; margin-right: 10px;
+  }
+  .fiche-location {
+    font-size: 0.85em; color: #78909c; margin-bottom: 14px;
+  }
+
+  /* Score ring */
+  .score-ring {
+    width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .score-ring span {
+    background: #151528; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68em; font-weight: 800; color: #b0bec5;
+  }
+
+  /* Contact block — THE STAR */
+  .contact-block {
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .contact-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0; font-size: 0.92em; color: #cfd8dc;
+  }
+  .contact-value { font-weight: 600; color: #e8e8e8; font-size: 1.02em; }
+  .contact-link { color: #4fc3f7; text-decoration: none; font-weight: 600; }
+  .contact-link:hover { text-decoration: underline; }
+  .contact-tag {
+    font-size: 0.68em; background: #2a2a4a; color: #90a4ae; padding: 1px 7px;
+    border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .mobile-highlight {
+    background: rgba(0,184,148,0.1); border-radius: 6px; padding: 5px 8px; margin: 2px -8px;
+  }
+  .mobile-highlight .contact-value { color: #00e6b8; }
+
+  /* Dirigeant */
+  .dirigeant-block { margin-bottom: 10px; }
+  .dir-name { font-size: 0.9em; color: #b0bec5; font-weight: 600; }
+  .dir-linkedin { margin-top: 3px; }
+  .linkedin-link { color: #4fc3f7; font-size: 0.82em; text-decoration: none; font-weight: 600; }
+  .linkedin-link:hover { text-decoration: underline; }
+
+  /* Metier */
+  .metier-block { margin-bottom: 10px; }
+  .metier-spec { font-size: 0.88em; color: #90a4ae; font-weight: 600; margin-bottom: 2px; }
+  .metier-acts { font-size: 0.8em; color: #607d8b; }
+
+  /* Badges */
+  .badges-block { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.75em; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .badge-rge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
+  .badge-blue { background: #1a3a5c; color: #4fc3f7; }
+  .badge-teal { background: #0d3d3d; color: #00cec9; }
+  .badge-orange { background: #3d2a0d; color: #f5a623; }
+
+  /* Assurance & Financier */
+  .card-assurance { display: inline-block; font-size: 0.85em; font-weight: 600; color: #fff; background: linear-gradient(135deg, #6a1b9a, #8e24aa); padding: 5px 12px; border-radius: 8px; margin-bottom: 8px; }
+  .card-no-assurance { display: inline-block; font-size: 0.82em; color: #ef5350; background: rgba(239,83,80,0.12); padding: 4px 10px; border-radius: 8px; margin-bottom: 8px; }
+  .card-financier { font-size: 0.78em; color: #546e7a; border-top: 1px solid #2a2a4a; padding-top: 8px; margin-top: 6px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 40px 20px; color: #546e7a; font-size: 0.9em;
+    border-top: 1px solid #1a1a35;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+  .footer .email { font-size: 1.1em; font-weight: 700; color: #78909c; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Base Artisans BTP &mdash; Département <span>maclas</span></h1>
+  <p class="subtitle">1 486 artisans | 43% avec mobile | 51% RGE | 21% assurance identifiée</p>
+  <p class="sample-note">Échantillon de 50 fiches représentatives sur 1 486</p>
+</div>
+
+<div class="grid-container">
+  <div class="grid">
+    
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ETS BEAUX</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 360deg, #2a2a4a 360deg);">
+          <span>100%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST CLAIR DU RHONE (38370)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474564430</span></div><div class="contact-row">📞 <span class="contact-value">04 74 56 44 30</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@beaux-electricite.fr</span></div><div class="contact-row">📧 <span class="contact-value">beaux.philippe@beaux-electricite.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.beaux-electricite.fr" class="contact-link" target="_blank">www.beaux-electricite.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BEAUX PHILIPPE</div><div class="dir-linkedin"><a href="https://www.linkedin.com/company/beaux-electricite" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMA BTP</div>
+      <div class="card-financier">CA: 6606882 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">Climacop</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ANDREZIEUX BOUTHEON (42160)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0667573025</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 49 37 33 82</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">climacop.contact@gmail.com</span></div><div class="contact-row">📧 <span class="contact-value">contact@climacop.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://climacop.fr" class="contact-link" target="_blank">climacop.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GUYOT NICOLAS &amp; MAZENOT SYLVAIN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : ERGO SV</div>
+      <div class="card-financier">CA: 1546925 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AUREC ELEC</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">FIRMINY (42700)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0606718719</span></div><div class="contact-row">📞 <span class="contact-value">04 77 91 18 20</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 19 92 54 74</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">aurec.elec@gmail.com</span></div><div class="contact-row">📧 <span class="contact-value">thierry.oriol@aurec-elec.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="http://www.aurec-elec.com/" class="contact-link" target="_blank">www.aurec-elec.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ORIOL THIERRY</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">2SBM</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHASSIEU (69680)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0686896857</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 61 77 35 70</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 99 37 86 22</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@yoursite.com</span></div><div class="contact-row">📧 <span class="contact-value">ets-2sbm@hotmail.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">notre.equipe@2sbm.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="http://www.2sbm.fr/" class="contact-link" target="_blank">www.2sbm.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 OUCHENE BRAHIM</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">CA: 308680 · Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">PONCET DAVID</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST GENIS L ARGENTIERE (69610)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474700576</span></div><div class="contact-row">📞 <span class="contact-value">04 74 70 05 76</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">entrepriseponcetdavid@orange.fr</span></div><div class="contact-row">🌐 <a href="https://www.plombier-chauffagiste-rhone.fr/" class="contact-link" target="_blank">www.plombier-chauffagiste-rhone.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PONCET DAVID</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : GROUPAMA RHONE ALPES AUVERGNE (Lyon)</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BASTIN</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">TENCE (43190)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0471654213</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 78 83 07 75</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">sas.bastinplatrerie@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">sas.bastinplomberie@orange.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BASTIN PATRICIA</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA IARD</div>
+      <div class="card-financier">CA: 861926 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">PLOMBERIE GERARD</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VAULX EN VELIN (69120)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478808205</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 26 41 54 97</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@entreprise-gerard.fr</span></div><div class="contact-row">📧 <span class="contact-value">stephane.amoudjayan@entreprise-gerard.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 TCHOULFAYAN GERARD</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AUXILIAIRE</div>
+      <div class="card-financier">CA: 3292784 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">LEBERT COUVERTURE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">OYTIER ST OBLAS (38780)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">07 61 11 01 60</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 61 11 01 60</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@lebert-couverture.fr</span></div><div class="contact-row">🌐 <a href="https://lebert-couverture.fr/" class="contact-link" target="_blank">lebert-couverture.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LEBERT THOMAS &mdash; Président</div><div class="dir-linkedin"><a href="https://www.linkedin.com/in/ACwAACg5j_QB87xluq5fv5CsmI_Ub-huHavSUKk" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Couverture Zinguerie</div><div class="metier-acts">Couvreur</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 00 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MS PLOMBERIE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST GENEST MALIFAUX (42660)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 86 33 27 21</span></div><div class="contact-row">📧 <span class="contact-value">contact.msplomberie@gmail.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 SABY MICKAEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : GROUPAMA RHONE ALPES AUVERGNE (Lyon)</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BATI RENOVE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHAMBLES (42170)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477558929</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 07 87 17 02</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">bati.renove@wanadoo.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 TAILLER PIERRICK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA FRANCE IARD</div>
+      <div class="card-financier">CA: 710041 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BURLET - ROBIN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHATEAUBOURG (07130)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475089544</span></div><div class="contact-row">📞 <span class="contact-value">09 74 35 26 73</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">04 75 08 95 44</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">burletrobin@hotmail.fr</span></div><div class="contact-row">🌐 <a href="https://www.electricite-burlet-robin.fr" class="contact-link" target="_blank">www.electricite-burlet-robin.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ROBIN Florent</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">HABITAT TRANSITION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VENISSIEUX (69200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0980808073</span></div><div class="contact-row">📞 <span class="contact-value">09 80 80 80 73</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">09 25 08 56 06</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 99 68 10 45</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 47 45 36 32</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 47 23 97 04</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@illucom.com</span></div><div class="contact-row">📧 <span class="contact-value">exemple@exemple.com</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.habitat-transition.fr" class="contact-link" target="_blank">www.habitat-transition.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FADHLAOUI ANIS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Spécialisé dans la rénovation énergétique</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RFCC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHANTEMERLE LES BLES (26600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 14 01 54 00</span></div><div class="contact-row">🌐 <a href="http://rfcc26.fr/" class="contact-link" target="_blank">rfcc26.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PELLET RAPHAEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste, Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA FRANCE IARD (Paris)</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ARDECHE INNOV'</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">DAVEZIEUX (07430)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475324582</span></div><div class="contact-row">📞 <span class="contact-value">04 75 32 45 82</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 99 71 96 46</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">ardecheinnov@orange.fr</span></div><div class="contact-row">🌐 <a href="https://www.ardecheinnov.fr" class="contact-link" target="_blank">www.ardecheinnov.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MURE BASTIEN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Charpentier, Menuisier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">Casa 9</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SURY LE COMTAL (42450)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0650074500</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">casa-9@outlook.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 POINSOT Kevin</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ CLOISONS, CLOISONS DE DOUBLAGE OU D'HABILLAGE/SEPARATIVES, CONDUITS ET GAINES DIVERS, MOQUETTE</div><div class="metier-acts">Vitrier, Plâtrier, Peintre extérieur</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : QBE</div>
+      <div class="card-financier">CA: 440000 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AUTHENTIQUE BOIS</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LYON 04 (69004)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478291717</span></div><div class="contact-row">📞 <span class="contact-value">04 78 29 17 17</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">09 33 15 37 20</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">p.caetano@ab-croixrousse.fr</span></div><div class="contact-row">📧 <span class="contact-value">contact@authentiquebois.com</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.authentiquebois.com" class="contact-link" target="_blank">www.authentiquebois.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Pedro CAETANO</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Agenceur, Menuisier</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">NUMEROBIS RENOVATION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VAULX EN VELIN (69120)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0481761416</span></div><div class="contact-row">📞 <span class="contact-value">04 88 91 95 32</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@numerobis.pro</span></div><div class="contact-row">🌐 <a href="https://www.numerobis.pro" class="contact-link" target="_blank">www.numerobis.pro</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LEGER BENJAMIN &amp; CAFAGNA JEAN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ONLY SUN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LYON 06 (69006)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 38 60 30 69</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 66 66 66 66</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@onlysun.fr</span></div><div class="contact-row">🌐 <a href="http://www.only-sun.fr/" class="contact-link" target="_blank">www.only-sun.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DUPONT XAVIER &amp; VITTOZ JEAN MICHEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">GOUIN PHILIPPE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST UZE (26240)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475032848</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GOUIN Philippe</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : AXA FRANCE IARD (Paris)</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AD ELEC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHANAS (38150)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474110896</span></div><div class="contact-row">📧 <span class="contact-value">d.arthaud@ad-elec.pro</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ARTHAUD DAVID</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">THERMIPAC 69</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LYON 08 (69008)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 02 09 61 65</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 SAHEL SAADEDDINE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : ERGO VERSICHERUNG</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">PASSION TRAVAUX</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST PERAY (07130)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475603414</span></div><div class="contact-row">🌐 <a href="https://www.passion-travaux.com" class="contact-link" target="_blank">www.passion-travaux.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ALMAGRO JOFFREY</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ MOQUETTE, PEINTURE REVETEMENT VITRERIE, PEINTURES EN LETTRES, REVETEMENTS DE PLAFONDS</div><div class="metier-acts">Vitrier, Revêtement de sol, Peintre intérieur</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RICCI FRANCK</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST GENIS LAVAL (69230)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478734297</span></div><div class="contact-row">🌐 <a href="https://www.plomberie-ricci.com" class="contact-link" target="_blank">www.plomberie-ricci.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RICCI FRANCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ZINGUERIE</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DERENON</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ROMANS SUR ISERE (26100)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">07 67 41 55 76</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BELOUCHRANI MAHREZ &amp; OUADINE ABDERAZAK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ELECTRIB</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GREZIEU LA VARENNE (69290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478571652</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RIBEIRO FRANCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SOLUTION TRAVAUX MD</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SERPAIZE (38200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 65 77 47 81</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DEVEAUX MATTHIAS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SOUBEYRAND EMMANUEL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST BASILE (07270)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475065515</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 SOUBEYRAND EMMANUEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Terrassier</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">VIVAL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SATILLIEU (07290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475067545</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 COMTE Gilbert</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, CLOTURES, CONDUITS DE FUMEE, FONDATIONS</div><div class="metier-acts">Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RIOM</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LA ROCHE DE GLUN (26600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0475846133</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RIOM CHRISTOPHE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">COLLET ELECTRICITE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST SIMEON DE BRESSIEUX (38870)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474200462</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 VERZIER ANDRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">JTCA</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CHAZELLES SUR LYON (42140)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477618022</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BOUCHUT  JEAN FRANCOIS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ AUVENT-BALCON (BOIS), CHARPENTE BOIS, COUVERTURES (ARDOISE-TUILE-ZINC-FIBRE CIMENT), ESCALIERS INTERIEURS</div><div class="metier-acts">Charpentier, Menuisier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MARTIN JEAN PAUL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST CHRISTO EN JAREZ (42320)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477208910</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MARTIN  JEAN PAUL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Peintre intérieur, Plâtrier, Vitrier, Revêtement de sol</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DUGENETAY FRERES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">FRAISSES (42490)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477562342</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DUGENETAY PIERRICK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Vitrier, Peintre intérieur, Revêtement de sol, Plâtrier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">L.C.M.</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">L HOPITAL LE GRAND (42210)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477761457</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CHEVROT LAURENT &amp; CHEVROT PIERRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuisier, Charpentier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BM THERMIQUE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST JUST ST RAMBERT (42170)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477552856</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MATICHARD BRUNO</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DIMIER</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">L ISLE D ABEAU (38080)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474271752</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DIMIER FABIEN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ AGENCEMENT, CHASSIS FIXES OU OUVRANTS, CLOISONS DE DOUBLAGE OU D'HABILLAGE/SEPARATIVES, DECORATION</div><div class="metier-acts">Menuisier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">KMB TEAM</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AGNIN (38150)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0482535036</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PARISI MARIO</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Couvreur</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">YANN PLOMBERIE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">L ISLE D ABEAU (38080)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474276676</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FOSSURIER YANN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">POLLET STEPHANE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">STE FOY LES LYON (69110)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478598372</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 POLLET STEPHANE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS</div><div class="metier-acts">Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ARTIGAZ</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST LAURENT DE MURE (69720)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0437466464</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DIOSSE EMMANUEL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">A2BE HOME</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LYON 09 (69009)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">a2behome@yahoo.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BOUSBOULA A. &amp; EL MOUHALIL A.</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">GROUPE CERTIFICAT ECONOMIE ENE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LYON 02 (69002)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0610034111</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BENHAMMOU FRANCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AD2H</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SIMANDRES (69360)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0682929897</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FERNANDEZ  RICHARD &amp; FERNANDEZ LORIS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MCL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST PRIEST (69800)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478011904</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LULLA GREGORY</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SAV CRYSTALE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST MAURICE L EXIL (38550)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474295682</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 COURTIAL PASCAL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BMS LE BATIMENT MULTI SERVICES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">DECINES CHARPIEU (69150)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0478528286</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BIENCOURT VINCENT</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, EQUIPEMENT D'ECLAIRAGE EXTERIEUR AUX BATIMENTS</div><div class="metier-acts">Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ETABLISSEMENT PIOLAT C</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VILLENEUVE DE MARC (38440)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0474159450</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PIOLAT CHRISTOPHE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BRAVAIS Romain</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BOURG LES VALENCE (26500)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0621420316</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BRAVAIS Romain</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MONCHALIN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SOUCIEU EN JARREST (69510)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0761534427</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MONCHALIN FRANCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CAILLET PLOMBERIE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ST MARCELLIN EN FOREZ (42680)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0477948793</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CAILLET FRANCK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Cet échantillon contient 50 fiches sur 1 486 dans le département maclas.</p>
+  <p class="email"><a href="mailto:paul@growth-factory.fr">paul@growth-factory.fr</a></p>
+</div>
+
+</body>
+</html>

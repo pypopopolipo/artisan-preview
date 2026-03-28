@@ -13,7 +13,27 @@ const path = require('path');
 // --- Args ---
 const dept = process.argv[2];
 const count = parseInt(process.argv[3] || '50', 10);
-if (!dept) { console.error('Usage: node generate_demo_page.js <dept> [count]'); process.exit(1); }
+const excludeFlag = process.argv.find(a => a.startsWith('--exclude='));
+const excludeAssureur = excludeFlag ? excludeFlag.split('=')[1].toUpperCase() : null;
+const suffixFlag = process.argv.find(a => a.startsWith('--suffix='));
+const fileSuffix = suffixFlag ? suffixFlag.split('=')[1] : '';
+const latFlag = process.argv.find(a => a.startsWith('--lat='));
+const lonFlag = process.argv.find(a => a.startsWith('--lon='));
+const radiusFlag = process.argv.find(a => a.startsWith('--radius='));
+const geoLat = latFlag ? parseFloat(latFlag.split('=')[1]) : null;
+const geoLon = lonFlag ? parseFloat(lonFlag.split('=')[1]) : null;
+const geoRadius = radiusFlag ? parseFloat(radiusFlag.split('=')[1]) : null;
+const useGeo = geoLat !== null && geoLon !== null && geoRadius !== null;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+if (!dept) { console.error('Usage: node generate_demo_page.js <dept|zone> [count] [--lat=X --lon=Y --radius=Zkm] [--exclude=AXA] [--suffix=-noaxa]'); process.exit(1); }
 
 // --- CSV Parser (handles BOM, quoted fields with commas/newlines) ---
 function parseCSV(text) {
@@ -74,11 +94,22 @@ const raw = fs.readFileSync(csvPath, 'utf-8');
 const allRows = parseCSV(raw);
 console.log(`Loaded ${allRows.length} rows total.`);
 
-// --- Filter by department ---
-const deptRows = allRows.filter(r => r.code_postal && r.code_postal.startsWith(dept));
-console.log(`Department ${dept}: ${deptRows.length} artisans found.`);
+// --- Filter by department or GPS radius ---
+let deptRows;
+if (useGeo) {
+  deptRows = allRows.filter(r => {
+    const lat = parseFloat(r.latitude);
+    const lon = parseFloat(r.longitude);
+    if (isNaN(lat) || isNaN(lon)) return false;
+    return haversine(geoLat, geoLon, lat, lon) <= geoRadius;
+  });
+  console.log(`Radius ${geoRadius}km from ${geoLat},${geoLon}: ${deptRows.length} artisans found.`);
+} else {
+  deptRows = allRows.filter(r => r.code_postal && r.code_postal.startsWith(dept));
+  console.log(`Department ${dept}: ${deptRows.length} artisans found.`);
+}
 
-if (deptRows.length === 0) { console.error(`No artisans found for department ${dept}.`); process.exit(1); }
+if (deptRows.length === 0) { console.error(`No artisans found.`); process.exit(1); }
 
 // --- Filter: must have at least 1 contact ---
 const withContact = deptRows.filter(r => {
@@ -87,32 +118,39 @@ const withContact = deptRows.filter(r => {
 });
 console.log(`With at least 1 contact: ${withContact.length}`);
 
+// --- Exclude assureur if specified ---
+const pool = excludeAssureur ? withContact.filter(r => {
+  const all = [r.assurance_rc, r.assurance_dc, r.qualibat_assurance].filter(Boolean).join(' ').toUpperCase();
+  return !all.includes(excludeAssureur);
+}) : withContact;
+if (excludeAssureur) console.log(`After excluding ${excludeAssureur}: ${pool.length}`);
+
 // --- Sort by score_completude desc, then take every Nth ---
-withContact.sort((a, b) => (parseFloat(b.score_completude) || 0) - (parseFloat(a.score_completude) || 0));
-const step = Math.max(1, Math.floor(withContact.length / count));
+pool.sort((a, b) => (parseFloat(b.score_completude) || 0) - (parseFloat(a.score_completude) || 0));
+const step = Math.max(1, Math.floor(pool.length / count));
 const sample = [];
-for (let idx = 0; idx < withContact.length && sample.length < count; idx += step) {
-  sample.push(withContact[idx]);
+for (let idx = 0; idx < pool.length && sample.length < count; idx += step) {
+  sample.push(pool[idx]);
 }
 // If we don't have enough, fill from the top
 if (sample.length < count) {
-  for (const r of withContact) {
+  for (const r of pool) {
     if (sample.length >= count) break;
     if (!sample.includes(r)) sample.push(r);
   }
 }
 console.log(`Sample size: ${sample.length}`);
 
-// --- Compute stats for header ---
-const total = deptRows.length;
-const hasMobile = deptRows.filter(r => {
+// --- Compute stats on filtered fiches ---
+const total = pool.length;
+const hasMobile = pool.filter(r => {
   const phones = [r.telephone, r.dirigeant_telephone, r.website_mobiles].filter(Boolean).join(' ');
   return /0[67]/.test(phones.replace(/[\s.\-]/g, ''));
 }).length;
 const pctMobile = Math.round(100 * hasMobile / total);
-const hasRGE = deptRows.filter(r => r.is_rge === 'oui' || r.is_rge === 'Oui' || r.is_rge === '1' || r.is_rge === 'true').length;
+const hasRGE = pool.filter(r => r.is_rge === 'oui' || r.is_rge === 'Oui' || r.is_rge === '1' || r.is_rge === 'true').length;
 const pctRGE = Math.round(100 * hasRGE / total);
-const hasAssurance = deptRows.filter(r => r.assurance_rc || r.assurance_dc).length;
+const hasAssurance = pool.filter(r => r.assurance_rc || r.assurance_dc).length;
 const pctAssurance = Math.round(100 * hasAssurance / total);
 
 // --- HTML escape ---
@@ -438,7 +476,7 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 // --- Write HTML ---
-const outFile = path.join(__dirname, `demo-${dept}.html`);
+const outFile = path.join(__dirname, `demo-${dept}${fileSuffix}.html`);
 fs.writeFileSync(outFile, html, 'utf-8');
 console.log(`\nGenerated: ${outFile}`);
 
@@ -505,7 +543,7 @@ const ws = XLSX.utils.aoa_to_sheet(sheetData);
 ws['!cols'] = EXCEL_COLS.map(([,h]) => ({ wch: Math.max(h.length + 4, 14) }));
 XLSX.utils.book_append_sheet(wb, ws, `Échantillon ${dept}`);
 
-const xlsxFile = path.join(__dirname, `export_dept_${dept}_${sample.length}fiches.xlsx`);
+const xlsxFile = path.join(__dirname, `export_dept_${dept}${fileSuffix}_${sample.length}fiches.xlsx`);
 XLSX.writeFile(wb, xlsxFile);
 console.log(`Generated: ${xlsxFile}`);
 console.log(`Stats: ${total} artisans dept ${dept} | ${pctMobile}% mobile | ${pctRGE}% RGE | ${pctAssurance}% assurance | ${sample.length} fiches exportées`);

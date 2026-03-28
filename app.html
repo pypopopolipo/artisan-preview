@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base Artisans BTP — Espace Client</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d0d1a;
+    color: #e0e0e0;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== LOGIN ===== */
+  .login-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  }
+  .login-box {
+    background: #151528;
+    border: 1px solid #2a2a4a;
+    border-radius: 18px;
+    padding: 48px 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .login-box h1 {
+    font-size: 1.8em;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .login-box h1 span { color: #4fc3f7; }
+  .login-box p { color: #78909c; font-size: 0.95em; margin-bottom: 30px; }
+  .login-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 10px;
+    color: #e0e0e0;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 16px;
+  }
+  .login-input:focus { border-color: #4fc3f7; }
+  .login-input::placeholder { color: #546e7a; }
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .login-btn:hover { opacity: 0.9; }
+  .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .login-error {
+    color: #ef5350;
+    font-size: 0.88em;
+    margin-top: 14px;
+    display: none;
+  }
+
+  /* ===== MAIN APP ===== */
+  .app-container { display: none; }
+
+  /* Header */
+  .app-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 28px 30px 22px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+  }
+  .header-top h1 {
+    font-size: 1.6em; font-weight: 800; color: #fff;
+  }
+  .header-top h1 span { color: #4fc3f7; }
+  .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-excel {
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    border: none; border-radius: 8px;
+    color: white; font-size: 0.85em; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .btn-excel:hover { opacity: 0.9; }
+  .btn-logout {
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid #546e7a;
+    border-radius: 8px;
+    color: #90a4ae; font-size: 0.85em; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: #ef5350; color: #ef5350; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 14px;
+  }
+  .stat-item {
+    font-size: 0.88em; color: #90a4ae;
+  }
+  .stat-item strong {
+    color: #4fc3f7; font-weight: 800; font-size: 1.1em;
+  }
+
+  /* Contacted progress */
+  .contacted-bar {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .contacted-bar .label { font-size: 0.88em; color: #90a4ae; }
+  .contacted-bar .progress-bg {
+    flex: 1; max-width: 200px; height: 8px;
+    background: #2a2a4a; border-radius: 6px; overflow: hidden;
+  }
+  .contacted-bar .progress-fg {
+    height: 100%; background: linear-gradient(90deg, #00b894, #00cec9);
+    border-radius: 6px; transition: width 0.3s;
+  }
+  .contacted-bar .count {
+    font-size: 0.88em; color: #00e6b8; font-weight: 700;
+  }
+
+  /* ===== FILTERS ===== */
+  .filters-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: #12122a;
+    border-bottom: 1px solid #2a2a4a;
+    padding: 14px 30px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .filter-input {
+    padding: 8px 14px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.88em;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 180px;
+  }
+  .filter-input:focus { border-color: #4fc3f7; }
+  .filter-input::placeholder { color: #546e7a; }
+  .filter-select {
+    padding: 8px 14px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.88em;
+    outline: none;
+    cursor: pointer;
+    max-width: 200px;
+  }
+  .filter-select:focus { border-color: #4fc3f7; }
+  .filter-toggle {
+    padding: 7px 14px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #90a4ae;
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-toggle.active {
+    background: rgba(0,184,148,0.15);
+    border-color: #00b894;
+    color: #00e6b8;
+  }
+  .filter-toggle-contact {
+    padding: 7px 14px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #90a4ae;
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-toggle-contact.active {
+    background: rgba(79,195,247,0.12);
+    border-color: #4fc3f7;
+    color: #4fc3f7;
+  }
+  .btn-reset {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid #546e7a;
+    border-radius: 8px;
+    color: #78909c;
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover { border-color: #ef5350; color: #ef5350; }
+
+  /* ===== CARDS GRID ===== */
+  .cards-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 800px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .filters-bar { padding: 12px 16px; }
+    .app-header { padding: 20px 16px 16px; }
+    .cards-container { padding: 16px 12px; }
+  }
+
+  /* Fiche card */
+  .fiche-card {
+    background: #151528;
+    border: 1px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .fiche-card:hover {
+    border-color: #4fc3f7;
+    box-shadow: 0 4px 24px rgba(79,195,247,0.08);
+  }
+  .fiche-card.contacted {
+    border-color: #00b89444;
+  }
+
+  .fiche-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 4px;
+  }
+  .fiche-name {
+    font-size: 1.1em; font-weight: 800; color: #fff;
+    line-height: 1.3; flex: 1; margin-right: 10px;
+  }
+  .score-ring {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .score-ring span {
+    background: #151528; width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65em; font-weight: 800; color: #b0bec5;
+  }
+  .fiche-location {
+    font-size: 0.85em; color: #78909c; margin-bottom: 12px;
+  }
+
+  /* Contact block */
+  .contact-block {
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .contact-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 0; font-size: 0.9em; color: #cfd8dc;
+  }
+  .contact-value { font-weight: 600; color: #e8e8e8; }
+  .contact-link {
+    color: #4fc3f7; text-decoration: none; font-weight: 600;
+  }
+  .contact-link:hover { text-decoration: underline; }
+  .contact-tag {
+    font-size: 0.65em; background: #2a2a4a; color: #90a4ae;
+    padding: 1px 7px; border-radius: 8px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .mobile-highlight {
+    background: rgba(0,184,148,0.1); border-radius: 6px;
+    padding: 4px 8px; margin: 2px -8px;
+  }
+  .mobile-highlight .contact-value { color: #00e6b8; }
+
+  /* Dirigeant */
+  .dirigeant-block { margin-bottom: 8px; font-size: 0.88em; color: #b0bec5; }
+  .dir-fonction { color: #78909c; font-size: 0.92em; }
+
+  /* Metier */
+  .metier-block { margin-bottom: 8px; }
+  .metier-spec { font-size: 0.85em; color: #90a4ae; font-weight: 600; }
+  .metier-acts { font-size: 0.78em; color: #607d8b; }
+
+  /* Badges */
+  .badges-block { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .badge {
+    display: inline-block; padding: 2px 9px; border-radius: 10px;
+    font-size: 0.72em; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .badge-rge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
+  .badge-blue { background: #1a3a5c; color: #4fc3f7; }
+  .badge-teal { background: #0d3d3d; color: #00cec9; }
+  .badge-orange { background: #3d2a0d; color: #f5a623; }
+  .badge-purple { background: linear-gradient(135deg, #6a1b9a, #8e24aa); color: white; }
+
+  /* Contacted toggle */
+  .btn-contacted {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #2e2e50;
+    background: #1a1a35;
+    color: #78909c;
+    font-size: 0.85em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+  .btn-contacted:hover {
+    border-color: #00b894;
+    color: #00e6b8;
+  }
+  .btn-contacted.active {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    border-color: #00b894;
+    color: white;
+  }
+
+  /* Notes */
+  .note-field {
+    width: 100%;
+    padding: 8px 10px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #cfd8dc;
+    font-size: 0.82em;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 36px;
+    max-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .note-field:focus { border-color: #4fc3f7; }
+  .note-field::placeholder { color: #546e7a; }
+
+  /* ===== PAGINATION ===== */
+  .pagination {
+    display: flex; justify-content: center; align-items: center;
+    gap: 16px; padding: 30px 20px;
+  }
+  .btn-page {
+    padding: 10px 22px;
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    color: #4fc3f7;
+    font-size: 0.9em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-page:hover:not(:disabled) {
+    background: #2a2a4a;
+    border-color: #4fc3f7;
+  }
+  .btn-page:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+  .page-info {
+    font-size: 0.9em; color: #78909c; font-weight: 600;
+  }
+
+  /* Loading */
+  .loading-overlay {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13,13,26,0.85);
+    z-index: 9999;
+    justify-content: center; align-items: center;
+  }
+  .loading-overlay.visible { display: flex; }
+  .loading-spinner {
+    width: 48px; height: 48px;
+    border: 4px solid #2a2a4a;
+    border-top-color: #4fc3f7;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* No results */
+  .no-results {
+    text-align: center; padding: 60px 20px;
+    color: #546e7a; font-size: 1.1em;
+  }
+
+  /* Filter count */
+  .filter-count {
+    font-size: 0.85em; color: #78909c; padding: 0 10px;
+    white-space: nowrap;
+  }
+  .filter-count strong { color: #4fc3f7; }
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h1>Base Artisans <span>BTP</span></h1>
+    <p>Espace client</p>
+    <input type="text" class="login-input" id="accessCode" placeholder="Code d'acces" autocomplete="off">
+    <button class="login-btn" id="loginBtn">Acceder</button>
+    <div class="login-error" id="loginError">Code invalide ou aucune donnee associee.</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app-container" id="appContainer">
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="header-top">
+      <h1>Base Artisans <span>BTP</span></h1>
+      <div class="header-actions">
+        <button class="btn-excel" onclick="exportExcel()">Telecharger Excel</button>
+        <button class="btn-logout" onclick="doLogout()">Deconnexion</button>
+      </div>
+    </div>
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="contacted-bar" id="contactedBar">
+      <span class="label">Contactes :</span>
+      <div class="progress-bg"><div class="progress-fg" id="contactedProgress" style="width:0%"></div></div>
+      <span class="count" id="contactedCount">0 / 0</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar" id="filtersBar">
+    <input type="text" class="filter-input" id="filterSearch" placeholder="Recherche nom, ville, dirigeant..." oninput="applyFilters()">
+    <select class="filter-select" id="filterVille" onchange="applyFilters()">
+      <option value="">Toutes les villes</option>
+    </select>
+    <button class="filter-toggle" id="filterMobile" onclick="toggleFilter(this)">Mobile</button>
+    <button class="filter-toggle" id="filterEmail" onclick="toggleFilter(this)">Email</button>
+    <button class="filter-toggle" id="filterRge" onclick="toggleFilter(this)">RGE</button>
+    <button class="filter-toggle" id="filterAssurance" onclick="toggleFilter(this)">Assurance</button>
+    <button class="filter-toggle-contact" id="filterContacted" onclick="cycleContactFilter()">Tous</button>
+    <span class="filter-count" id="filterCount"></span>
+    <button class="btn-reset" onclick="resetFilters()">Reset</button>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-container">
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="no-results" id="noResults" style="display:none;">Aucune fiche ne correspond aux filtres.</div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" id="pagination">
+    <button class="btn-page" id="btnPrev" onclick="changePage(-1)">Precedent</button>
+    <span class="page-info" id="pageInfo">Page 1 sur 1</span>
+    <button class="btn-page" id="btnNext" onclick="changePage(1)">Suivant</button>
+  </div>
+
+</div>
+
+<script>
+// ===== CONFIG =====
+const SUPABASE_URL = 'https://gzqtlfnucxyklxawwbxo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_knpaWjKlU6MV_XaTzoJPbQ_1G4pffBg';
+const PER_PAGE = 50;
+
+let sbClient = null;
+let allFiches = [];
+let markers = {};  // siret -> { contacted, notes }
+let filtered = [];
+let currentPage = 1;
+let contactFilterState = 0; // 0=all, 1=contacted, 2=non-contacted
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  console.log('window.supabase =', typeof window.supabase, window.supabase);
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    console.log('Button clicked');
+    doLogin();
+  });
+  document.getElementById('accessCode').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+  const saved = localStorage.getItem('artisan_client_code');
+  if (saved) {
+    document.getElementById('accessCode').value = saved;
+  }
+});
+
+// ===== LOGIN =====
+async function doLogin() {
+  const code = document.getElementById('accessCode').value.trim();
+  if (!code) return;
+
+  showLoading(true);
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginBtn').disabled = true;
+
+  try {
+    if (!window.supabase || !window.supabase.createClient) {
+      alert('Supabase lib not loaded. window.supabase=' + typeof window.supabase);
+      return;
+    }
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      global: {
+        headers: { 'x-client-code': code }
+      }
+    });
+
+    // Fetch fiches
+    let allData = [];
+    let from = 0;
+    const batchSize = 1000;
+    while (true) {
+      const { data, error } = await sbClient
+        .from('fiches')
+        .select('*')
+        .range(from, from + batchSize - 1);
+      if (error) throw error;
+      if (!data || data.length === 0) break;
+      allData = allData.concat(data);
+      if (data.length < batchSize) break;
+      from += batchSize;
+    }
+
+    if (allData.length === 0) {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginBtn').disabled = false;
+      showLoading(false);
+      return;
+    }
+
+    allFiches = allData;
+    localStorage.setItem('artisan_client_code', code);
+
+    // Fetch markers
+    const { data: markerData } = await sbClient
+      .from('markers')
+      .select('*');
+    markers = {};
+    if (markerData) {
+      markerData.forEach(m => {
+        markers[m.siret] = { contacted: m.contacted || false, notes: m.notes || '' };
+      });
+    }
+
+    // Switch to app
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appContainer').style.display = 'block';
+
+    buildStats();
+    buildVilleDropdown();
+    applyFilters();
+
+  } catch (err) {
+    console.error('Login error:', err);
+    alert('Erreur login: ' + (err.message || JSON.stringify(err)));
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginBtn').disabled = false;
+  }
+  showLoading(false);
+}
+
+function doLogout() {
+  localStorage.removeItem('artisan_client_code');
+  sbClient = null;
+  allFiches = [];
+  markers = {};
+  document.getElementById('appContainer').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('accessCode').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginBtn').disabled = false;
+}
+
+// ===== STATS =====
+function buildStats() {
+  const total = allFiches.length;
+  const withMobile = allFiches.filter(f => hasMobile(f)).length;
+  const withEmail = allFiches.filter(f => hasEmail(f)).length;
+  const withRge = allFiches.filter(f => isRge(f)).length;
+  const withAssurance = allFiches.filter(f => hasAssurance(f)).length;
+
+  const pct = (n) => total ? Math.round(n / total * 100) : 0;
+
+  document.getElementById('statsBar').innerHTML = `
+    <span class="stat-item"><strong>${total.toLocaleString('fr')}</strong> fiches</span>
+    <span class="stat-item"><strong>${pct(withMobile)}%</strong> avec mobile</span>
+    <span class="stat-item"><strong>${pct(withEmail)}%</strong> avec email</span>
+    <span class="stat-item"><strong>${pct(withRge)}%</strong> RGE</span>
+    <span class="stat-item"><strong>${pct(withAssurance)}%</strong> assurance</span>
+  `;
+  updateContactedBar();
+}
+
+function updateContactedBar() {
+  const total = allFiches.length;
+  const contacted = Object.values(markers).filter(m => m.contacted).length;
+  const pct = total ? Math.round(contacted / total * 100) : 0;
+  document.getElementById('contactedProgress').style.width = pct + '%';
+  document.getElementById('contactedCount').textContent = `${contacted} / ${total}`;
+}
+
+// ===== VILLE DROPDOWN =====
+function buildVilleDropdown() {
+  const villes = {};
+  allFiches.forEach(f => {
+    const v = (f.ville || '').trim();
+    if (v) villes[v] = (villes[v] || 0) + 1;
+  });
+  const sorted = Object.entries(villes).sort((a, b) => b[1] - a[1]);
+  const sel = document.getElementById('filterVille');
+  sel.innerHTML = '<option value="">Toutes les villes</option>';
+  sorted.forEach(([v, c]) => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = `${v} (${c})`;
+    sel.appendChild(opt);
+  });
+}
+
+// ===== HELPERS =====
+function hasMobile(f) {
+  const tel = f.telephone || '';
+  const dirTel = f.dirigeant_telephone || '';
+  const webMob = f.website_mobiles || '';
+  return /0[67]/.test(tel) || /0[67]/.test(dirTel) || webMob.length > 0;
+}
+function hasEmail(f) {
+  return !!(f.email_generique || f.email_dirigeant || f.website_emails);
+}
+function isRge(f) {
+  return f.is_rge === true || f.is_rge === 'oui' || f.is_rge === 1;
+}
+function hasAssurance(f) {
+  return !!(f.assurance_rc || f.assurance_dc);
+}
+function getScore(f) {
+  return f.score_completude || 0;
+}
+function getMarker(f) {
+  const siret = f.siret || f.id;
+  return markers[siret] || { contacted: false, notes: '' };
+}
+
+// ===== FILTERS =====
+function toggleFilter(btn) {
+  btn.classList.toggle('active');
+  applyFilters();
+}
+function cycleContactFilter() {
+  contactFilterState = (contactFilterState + 1) % 3;
+  const btn = document.getElementById('filterContacted');
+  const labels = ['Tous', 'Contactes', 'Non contactes'];
+  btn.textContent = labels[contactFilterState];
+  btn.classList.toggle('active', contactFilterState !== 0);
+  applyFilters();
+}
+function resetFilters() {
+  document.getElementById('filterSearch').value = '';
+  document.getElementById('filterVille').value = '';
+  document.querySelectorAll('.filter-toggle').forEach(b => b.classList.remove('active'));
+  contactFilterState = 0;
+  const btn = document.getElementById('filterContacted');
+  btn.textContent = 'Tous';
+  btn.classList.remove('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const search = (document.getElementById('filterSearch').value || '').toLowerCase().trim();
+  const ville = document.getElementById('filterVille').value;
+  const needMobile = document.getElementById('filterMobile').classList.contains('active');
+  const needEmail = document.getElementById('filterEmail').classList.contains('active');
+  const needRge = document.getElementById('filterRge').classList.contains('active');
+  const needAssurance = document.getElementById('filterAssurance').classList.contains('active');
+
+  filtered = allFiches.filter(f => {
+    if (search) {
+      const haystack = [
+        f.nom_entreprise, f.ville, f.dirigeant_nom_complet, f.dirigeant_prenom, f.dirigeant_nom,
+        f.code_postal, f.specialite
+      ].filter(Boolean).join(' ').toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    if (ville && (f.ville || '').trim() !== ville) return false;
+    if (needMobile && !hasMobile(f)) return false;
+    if (needEmail && !hasEmail(f)) return false;
+    if (needRge && !isRge(f)) return false;
+    if (needAssurance && !hasAssurance(f)) return false;
+
+    if (contactFilterState === 1 && !getMarker(f).contacted) return false;
+    if (contactFilterState === 2 && getMarker(f).contacted) return false;
+
+    return true;
+  });
+
+  currentPage = 1;
+  renderPage();
+}
+
+// ===== RENDER =====
+function renderPage() {
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PER_PAGE;
+  const page = filtered.slice(start, start + PER_PAGE);
+
+  const grid = document.getElementById('cardsGrid');
+  const noRes = document.getElementById('noResults');
+
+  document.getElementById('filterCount').innerHTML = `<strong>${total}</strong> resultat${total !== 1 ? 's' : ''}`;
+
+  if (page.length === 0) {
+    grid.innerHTML = '';
+    noRes.style.display = 'block';
+    document.getElementById('pagination').style.display = 'none';
+    return;
+  }
+
+  noRes.style.display = 'none';
+  document.getElementById('pagination').style.display = 'flex';
+
+  grid.innerHTML = page.map(f => buildCard(f)).join('');
+
+  document.getElementById('pageInfo').textContent = `Page ${currentPage} sur ${totalPages}`;
+  document.getElementById('btnPrev').disabled = currentPage <= 1;
+  document.getElementById('btnNext').disabled = currentPage >= totalPages;
+
+  // Scroll to top of cards
+  document.querySelector('.cards-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function buildCard(f) {
+  const siret = f.siret || f.id || '';
+  const score = getScore(f);
+  const m = getMarker(f);
+  const scoreColor = score >= 70 ? '#00b894' : score >= 40 ? '#f5a623' : '#ef5350';
+  const scoreDeg = Math.round(score / 100 * 360);
+
+  let contactHtml = '';
+  const tel = f.telephone;
+  const mob = f.dirigeant_telephone;
+  const webMob = f.website_mobiles;
+  const emailGen = f.email_generique;
+  const emailDir = f.email_dirigeant;
+  const emailWeb = f.website_emails;
+  const site = f.site_web;
+
+  if (tel) contactHtml += `<div class="contact-row">&#128222; <a href="tel:${tel}" class="contact-link">${tel}</a></div>`;
+  if (mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${mob}" class="contact-link contact-value">${mob}</a> <span class="contact-tag">dirigeant</span></div>`;
+  if (webMob && webMob !== mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${webMob.split(',')[0].trim()}" class="contact-link contact-value">${webMob}</a> <span class="contact-tag">site</span></div>`;
+  if (emailGen) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailGen}" class="contact-link">${emailGen}</a></div>`;
+  if (emailDir) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailDir}" class="contact-link">${emailDir}</a> <span class="contact-tag">dirigeant</span></div>`;
+  if (emailWeb && emailWeb !== emailGen && emailWeb !== emailDir) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailWeb}" class="contact-link">${emailWeb}</a> <span class="contact-tag">site</span></div>`;
+  if (site) {
+    const href = site.startsWith('http') ? site : 'https://' + site;
+    const display = site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+    contactHtml += `<div class="contact-row">&#127760; <a href="${href}" class="contact-link" target="_blank" rel="noopener">${display}</a></div>`;
+  }
+
+  let dirigeantHtml = '';
+  const dirNom = f.dirigeant_nom_complet || [f.dirigeant_prenom, f.dirigeant_nom].filter(Boolean).join(' ');
+  if (dirNom) {
+    dirigeantHtml = `<div class="dirigeant-block">&#128100; ${esc(dirNom)}`;
+    if (f.linkedin_fonction) dirigeantHtml += ` <span class="dir-fonction">${esc(f.linkedin_fonction)}</span>`;
+    dirigeantHtml += `</div>`;
+  }
+
+  let metierHtml = '';
+  if (f.specialite || f.activites_principales) {
+    metierHtml = '<div class="metier-block">';
+    if (f.specialite) metierHtml += `<div class="metier-spec">${esc(f.specialite)}</div>`;
+    if (f.activites_principales) metierHtml += `<div class="metier-acts">${esc(f.activites_principales)}</div>`;
+    metierHtml += '</div>';
+  }
+
+  let badgesHtml = '';
+  const badges = [];
+  if (isRge(f)) badges.push('<span class="badge badge-rge">RGE</span>');
+  if (f.qualibat === 'oui' || f.qualibat === true) badges.push('<span class="badge badge-blue">Qualibat</span>');
+  if (f.qualienr === 'oui' || f.qualienr === true) badges.push('<span class="badge badge-teal">QualiENR</span>');
+  if (f.qualifelec === 'oui' || f.qualifelec === true) badges.push('<span class="badge badge-orange">Qualifelec</span>');
+  if (hasAssurance(f)) {
+    const assureur = f.assurance_rc || f.assurance_dc;
+    badges.push(`<span class="badge badge-purple">${esc(assureur)}</span>`);
+  }
+  if (badges.length) badgesHtml = `<div class="badges-block">${badges.join('')}</div>`;
+
+  return `
+    <div class="fiche-card${m.contacted ? ' contacted' : ''}" data-siret="${esc(siret)}">
+      <div class="fiche-header">
+        <div class="fiche-name">${esc(f.nom_entreprise || 'Sans nom')}</div>
+        <div class="score-ring" style="background: conic-gradient(${scoreColor} ${scoreDeg}deg, #2a2a4a ${scoreDeg}deg);">
+          <span>${score}%</span>
+        </div>
+      </div>
+      <div class="fiche-location">${esc(f.ville || '')} ${f.code_postal ? '(' + esc(f.code_postal) + ')' : ''}</div>
+      ${contactHtml ? '<div class="contact-block">' + contactHtml + '</div>' : ''}
+      ${dirigeantHtml}
+      ${metierHtml}
+      ${badgesHtml}
+      <button class="btn-contacted${m.contacted ? ' active' : ''}" onclick="toggleContacted('${esc(siret)}', this)">
+        ${m.contacted ? '&#10003; Contacte' : 'Marquer contacte'}
+      </button>
+      <textarea class="note-field" placeholder="Notes..." onblur="saveNote('${esc(siret)}', this)">${esc(m.notes)}</textarea>
+    </div>
+  `;
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ===== PAGINATION =====
+function changePage(delta) {
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const next = currentPage + delta;
+  if (next < 1 || next > totalPages) return;
+  currentPage = next;
+  renderPage();
+}
+
+// ===== CONTACTED / NOTES =====
+async function toggleContacted(siret, btn) {
+  if (!siret) return;
+  const m = markers[siret] || { contacted: false, notes: '' };
+  m.contacted = !m.contacted;
+  markers[siret] = m;
+
+  btn.classList.toggle('active', m.contacted);
+  btn.innerHTML = m.contacted ? '&#10003; Contacte' : 'Marquer contacte';
+  btn.closest('.fiche-card').classList.toggle('contacted', m.contacted);
+
+  updateContactedBar();
+
+  try {
+    await sbClient.from('markers').upsert({
+      siret: siret,
+      contacted: m.contacted,
+      notes: m.notes
+    }, { onConflict: 'siret' });
+  } catch (e) {
+    console.error('Error saving contacted:', e);
+  }
+}
+
+async function saveNote(siret, textarea) {
+  if (!siret) return;
+  const m = markers[siret] || { contacted: false, notes: '' };
+  m.notes = textarea.value;
+  markers[siret] = m;
+
+  try {
+    await sbClient.from('markers').upsert({
+      siret: siret,
+      contacted: m.contacted,
+      notes: m.notes
+    }, { onConflict: 'siret' });
+  } catch (e) {
+    console.error('Error saving note:', e);
+  }
+}
+
+// ===== EXCEL EXPORT =====
+function exportExcel() {
+  const headers = {
+    nom_entreprise: 'Entreprise',
+    siret: 'SIRET',
+    forme_juridique: 'Forme juridique',
+    code_ape: 'Code APE',
+    activite_naf: 'Activite NAF',
+    date_creation: 'Date creation',
+    telephone: 'Telephone',
+    dirigeant_telephone: 'Mobile dirigeant',
+    email_generique: 'Email',
+    email_dirigeant: 'Email dirigeant',
+    website_emails: 'Emails site web',
+    website_mobiles: 'Mobiles site web',
+    site_web: 'Site web',
+    adresse: 'Adresse',
+    code_postal: 'Code postal',
+    ville: 'Ville',
+    dirigeant_nom_complet: 'Dirigeant',
+    dirigeant_prenom: 'Prenom',
+    dirigeant_nom: 'Nom',
+    linkedin_fonction: 'Fonction',
+    linkedin_profil: 'LinkedIn',
+    specialite: 'Specialite',
+    activites_principales: 'Activites',
+    is_rge: 'RGE',
+    qualibat: 'Qualibat',
+    qualibat_detail: 'Qualibat detail',
+    qualienr: 'QualiENR',
+    certifs_enr: 'Certifs ENR',
+    qualifelec: 'Qualifelec',
+    assurance_rc: 'Assurance RC',
+    assureur: 'Assureur',
+    chiffre_affaires: 'CA',
+    effectif: 'Effectif',
+    categorie_entreprise: 'Categorie',
+    solvabilite: 'Solvabilite',
+    sources: 'Sources',
+    nb_sources: 'Nb sources',
+    score_completude: 'Completude'
+  };
+
+  const cols = Object.keys(headers);
+  const rows = allFiches.map(f => {
+    const row = {};
+    cols.forEach(c => { row[headers[c]] = f[c] || ''; });
+    // Add marker info
+    const m = getMarker(f);
+    row['Contacte'] = m.contacted ? 'Oui' : '';
+    row['Notes'] = m.notes || '';
+    return row;
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Artisans');
+
+  const d = new Date();
+  const dateStr = d.toISOString().slice(0, 10).replace(/-/g, '');
+  XLSX.writeFile(wb, `export_artisans_${dateStr}.xlsx`);
+}
+
+// ===== LOADING =====
+function showLoading(show) {
+  document.getElementById('loading').classList.toggle('visible', show);
+}
+</script>
+</body>
+</html>

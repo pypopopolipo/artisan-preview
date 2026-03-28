@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base Artisans BTP — Département 20</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0d0d1a; color: #e0e0e0; line-height: 1.6; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white; padding: 50px 40px 40px; text-align: center;
+  }
+  .hero h1 { font-size: 2.4em; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero h1 span { color: #4fc3f7; }
+  .hero .subtitle { font-size: 1.05em; color: #90a4ae; margin-bottom: 6px; }
+  .hero .sample-note { font-size: 0.88em; color: #607d8b; margin-top: 12px; }
+
+  /* Grid */
+  .grid-container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Cards */
+  .fiche-card {
+    background: #151528;
+    border: 1px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .fiche-card:hover {
+    border-color: #4fc3f7;
+    box-shadow: 0 4px 24px rgba(79,195,247,0.1);
+  }
+
+  .fiche-header {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;
+  }
+  .fiche-name {
+    font-size: 1.12em; font-weight: 800; color: #ffffff; line-height: 1.3; flex: 1; margin-right: 10px;
+  }
+  .fiche-location {
+    font-size: 0.85em; color: #78909c; margin-bottom: 14px;
+  }
+
+  /* Score ring */
+  .score-ring {
+    width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .score-ring span {
+    background: #151528; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68em; font-weight: 800; color: #b0bec5;
+  }
+
+  /* Contact block — THE STAR */
+  .contact-block {
+    background: #1a1a35;
+    border: 1px solid #2e2e50;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .contact-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0; font-size: 0.92em; color: #cfd8dc;
+  }
+  .contact-value { font-weight: 600; color: #e8e8e8; font-size: 1.02em; }
+  .contact-link { color: #4fc3f7; text-decoration: none; font-weight: 600; }
+  .contact-link:hover { text-decoration: underline; }
+  .contact-tag {
+    font-size: 0.68em; background: #2a2a4a; color: #90a4ae; padding: 1px 7px;
+    border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .mobile-highlight {
+    background: rgba(0,184,148,0.1); border-radius: 6px; padding: 5px 8px; margin: 2px -8px;
+  }
+  .mobile-highlight .contact-value { color: #00e6b8; }
+
+  /* Dirigeant */
+  .dirigeant-block { margin-bottom: 10px; }
+  .dir-name { font-size: 0.9em; color: #b0bec5; font-weight: 600; }
+  .dir-linkedin { margin-top: 3px; }
+  .linkedin-link { color: #4fc3f7; font-size: 0.82em; text-decoration: none; font-weight: 600; }
+  .linkedin-link:hover { text-decoration: underline; }
+
+  /* Metier */
+  .metier-block { margin-bottom: 10px; }
+  .metier-spec { font-size: 0.88em; color: #90a4ae; font-weight: 600; margin-bottom: 2px; }
+  .metier-acts { font-size: 0.8em; color: #607d8b; }
+
+  /* Badges */
+  .badges-block { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.75em; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .badge-rge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; }
+  .badge-blue { background: #1a3a5c; color: #4fc3f7; }
+  .badge-teal { background: #0d3d3d; color: #00cec9; }
+  .badge-orange { background: #3d2a0d; color: #f5a623; }
+
+  /* Assurance & Financier */
+  .card-assurance { display: inline-block; font-size: 0.85em; font-weight: 600; color: #fff; background: linear-gradient(135deg, #6a1b9a, #8e24aa); padding: 5px 12px; border-radius: 8px; margin-bottom: 8px; }
+  .card-no-assurance { display: inline-block; font-size: 0.82em; color: #ef5350; background: rgba(239,83,80,0.12); padding: 4px 10px; border-radius: 8px; margin-bottom: 8px; }
+  .card-financier { font-size: 0.78em; color: #546e7a; border-top: 1px solid #2a2a4a; padding-top: 8px; margin-top: 6px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 40px 20px; color: #546e7a; font-size: 0.9em;
+    border-top: 1px solid #1a1a35;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+  .footer .email { font-size: 1.1em; font-weight: 700; color: #78909c; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Base Artisans BTP &mdash; Département <span>20</span></h1>
+  <p class="subtitle">337 artisans | 57% avec mobile | 53% RGE | 46% assurance identifiée</p>
+  <p class="sample-note">Échantillon de 50 fiches représentatives sur 337</p>
+</div>
+
+<div class="grid-container">
+  <div class="grid">
+    
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SOLECO</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495307214</span></div><div class="contact-row">📞 <span class="contact-value">04 95 30 72 14</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">04 95 55 24 00</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 03 15 47 40</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@soleco.fr</span></div><div class="contact-row">📧 <span class="contact-value">info@soleco.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.soleco.fr" class="contact-link" target="_blank">www.soleco.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 NAVARI  JEAN PIERRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span><span class="badge badge-teal">QualiENR</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : QBE</div>
+      <div class="card-financier">CA: 12366500 · Effectif: 21 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ALTA ROCCA BTP</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 327.6deg, #2a2a4a 327.6deg);">
+          <span>91%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CARGIACA (20164)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495734247</span></div><div class="contact-row">📞 <span class="contact-value">04 95 20 51 04</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">09 99 99 99 99</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 32 26 16 24</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">fabrice.piccolo@gmail.com</span></div><div class="contact-row">🌐 <a href="https://www.alta-rocca-btp.com" class="contact-link" target="_blank">www.alta-rocca-btp.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 PICCOLO FABRICE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAF</div>
+      <div class="card-financier">CA: 672020 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">M-G CONSTRUCTIONS</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 20 15 34 21</span></div><div class="contact-row">📞 <span class="contact-value">05 52 01 95 80</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">02 84 73 68 32</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 20 15 34 21</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">mg-constructions@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">antoinedume@gmail.com</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.mgconstructions-corse.fr" class="contact-link" target="_blank">www.mgconstructions-corse.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CLEMENT GOMES &mdash; Président</div><div class="dir-linkedin"><a href="https://www.linkedin.com/in/ACwAACIrd9wBS-aU0KkjS4QajvRENNejI2MGZ5U" target="_blank" class="linkedin-link">LinkedIn ↗</a></div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 390000 · Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SANITAIRE CHAUFFAGE BALDOCCHI</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 309.6deg, #2a2a4a 309.6deg);">
+          <span>86%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495302578</span></div><div class="contact-row">📧 <span class="contact-value">contact@baldocchi.fr</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BALDOCCHI VINCENT</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 4265574 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CHAUFFAGE PLOMBERIE ARTISANALE MURA</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SARROLA-CARCOPINO (20167)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">04 95 22 90 61</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 45 38 76 23</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 45 38 76 61</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@entreprise-plomberie-ajaccio.fr</span></div><div class="contact-row">📧 <span class="contact-value">contact@sarlmura.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.sarlmura.com" class="contact-link" target="_blank">www.sarlmura.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Christophe MURA</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plomberie, chauffage</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 2365531 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BATI COSTA VERDE</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CERVIONE (20221)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495385951</span></div><div class="contact-row">📧 <span class="contact-value">baticostaverde@orange.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MARTINS DIAS DA SILVA CESAR</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : GAN</div>
+      <div class="card-financier">CA: 1133412 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">EURO CONSTRUCTION 2000</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495306197</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 26 87 32 73</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">euro.construction2000@wanadoo.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 KANABO PIERRE MARIE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 888542 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">F.M. BAIES SARL</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AFA (20167)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">04 95 10 51 00</span></div><div class="contact-row">📧 <span class="contact-value">fmbaies@fmbaies.fr</span></div><div class="contact-row">📧 <span class="contact-value">a.moulin@fmbaies.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.fmbaies.fr" class="contact-link" target="_blank">www.fmbaies.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Alexis MOULIN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 2512Z</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA IARD</div>
+      <div class="card-financier">CA: 5200000 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">TERRASSEMENTS CORSES TERRACO</div>
+        <div class="score-ring" style="background: conic-gradient(#00b894 295.2deg, #2a2a4a 295.2deg);">
+          <span>82%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PENTA-DI-CASINCA (20213)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 91 33 49 63</span></div><div class="contact-row">📞 <span class="contact-value">04 95 58 92 10</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 14 86 60 48</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 91 33 49 63</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@terraco20.fr</span></div><div class="contact-row">📧 <span class="contact-value">c.dalessio@groupebrandizi.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.terraco.fr/" class="contact-link" target="_blank">www.terraco.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Petrughjuvanni TORRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Routes et autoroutes</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 42395691 · Effectif: 22 · ETI</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">INNETECH</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495338572</span></div><div class="contact-row">📞 <span class="contact-value">04 95 33 85 72</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">contact@innetech.fr</span></div><div class="contact-row">🌐 <a href="http://www.innetech.fr/" class="contact-link" target="_blank">www.innetech.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 HOLMIERE DAVID</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ETS NAVEZ</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LUMIO (20260)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495600618</span></div><div class="contact-row">📞 <span class="contact-value">04 77 59 10 40</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">04 95 60 06 18</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 07 66 02 98</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">sarletsnavez@orange.fr</span></div><div class="contact-row">🌐 <a href="https://www.chauffage-calvi-navez.fr" class="contact-link" target="_blank">www.chauffage-calvi-navez.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 NAVEZ PASCAL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">V E P PLOMBERIE ELECTRICITE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">LUCCIANA (20290)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">sarl.mv@orange.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 VALLICCIONI JACQUES</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : GAN</div>
+      <div class="card-financier">CA: 3378000 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AMBIANCE CONSTRUCTIONS</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTELICACCIA (20129)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">09 70 35 69 17</span></div><div class="contact-row">📧 <span class="contact-value">contact@ac-ambianceconstructions.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.ambiance-constructions.fr/" class="contact-link" target="_blank">www.ambiance-constructions.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FRANCOIS PORCU</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP H</div>
+      <div class="card-financier">CA: 677629 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">BERNARDINI BTP</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SARROLA-CARCOPINO (20167)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">contact@sarlbernardini.com</span></div><div class="contact-row">📧 <span class="contact-value">bernardini.michel@bernardinibtp.com</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.bernardinibtp.com" class="contact-link" target="_blank">www.bernardinibtp.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MICHEL BERNARDINI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 2713103 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">I MAESTRI</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 277.2deg, #2a2a4a 277.2deg);">
+          <span>77%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20090)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 09 08 02 06</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact@imaestri.fr</span></div><div class="contact-row">📧 <span class="contact-value">contact@imaestri.corsica</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="http://www.imaestri.fr/" class="contact-link" target="_blank">www.imaestri.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Jean-François LUCIANI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Peinture, vitrerie</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMABTP</div>
+      <div class="card-financier">CA: 5704953 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CELSIUS CLIMATISATION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20090)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">07 72 51 75 94</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">07 72 51 75 94</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="https://www.celsius-climatisation.com" class="contact-link" target="_blank">www.celsius-climatisation.com</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LUCIANI  ALEXANDRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SMP</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BIGUGLIA (20620)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495486731</span></div><div class="contact-row">📞 <span class="contact-value">04 95 48 67 31</span> <span class="contact-tag">site</span></div><div class="contact-row">📞 <span class="contact-value">04 95 36 49 99</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">smp.secretaire@gmail.com</span></div><div class="contact-row">🌐 <a href="https://www.smp.corsica" class="contact-link" target="_blank">www.smp.corsica</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MARINETTI  ALEXANDRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ SMP est une société spécialisée dans le domaine de l'électricité générale du bâtiment. Elle peut aussi compter sur le soutien de ses filiales - AcquaTech spécialisée dans la plomberie, climatisation et VMC - ÉcoPrimes spécialisée dans l'installation de panneaux photovoltaïques et SolaBorn spécialisée dans l'installation de bornes de recharge pour véhicules électriques.</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">TANDEM BTP</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20000)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 25 81 03 40</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 25 81 03 40</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">tandembtp02@gmail.com</span></div><div class="contact-row">📧 <span class="contact-value">tandem.fr@gmail.com</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="http://www.tandembtp.fr/" class="contact-link" target="_blank">www.tandembtp.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JEAN JOSEPH KAROL</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 41.20A</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">CA: 2695693 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">M.E.G</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20090)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 32 61 68 00</span></div><div class="contact-row">📞 <span class="contact-value">05 70 97 48 34</span> <span class="contact-tag">site</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 32 61 68 00</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">jf.mozziconacci@gmail.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JEAN-FRANCOIS MOZZICONACCI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : MAAF</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SEEC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BIGUGLIA (20620)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0621632124</span></div><div class="contact-row">🌐 <a href="https://sophie.cruciani@orange.fr" class="contact-link" target="_blank">sophie.cruciani@orange.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CRUCIANI FRANCOIS</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SARL BASTIALUTECHNIE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">a.crastucci@bastialutechnie.fr</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">🌐 <a href="https://www.bastialutechnie.fr" class="contact-link" target="_blank">www.bastialutechnie.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 André CRASTUCCI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 2512Z</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA IARD</div>
+      <div class="card-financier">CA: 3378730 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ENTRE GALE DU BATIMENT TRAVAUX PUBLICS</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">FURIANI (20600)</div>
+      <div class="contact-block"><div class="contact-row">📧 <span class="contact-value">egbtp.sabrina@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">secretariat@egbtp2b.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JEAN MARC BALSAN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : GAN</div>
+      <div class="card-financier">CA: 3385458 · Effectif: 12 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SORTELLE ELECTRICITE DU SUD CORSE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PORTO-VECCHIO (20137)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 48 63 48 29</span></div><div class="contact-row">📧 <span class="contact-value">contact@electricitesudcorse.fr</span></div><div class="contact-row">🌐 <a href="http://www.electricitesudcorse.fr/" class="contact-link" target="_blank">www.electricitesudcorse.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Anthony Sortelle</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD (Paris)</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">AC ELEC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 262.8deg, #2a2a4a 262.8deg);">
+          <span>73%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0624963627</span></div><div class="contact-row">📧 <span class="contact-value">contact@ac-elec.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MATTHIAS BERNARD</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : SMA BTP</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ESPACE HABITAT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AFA (20167)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495100677</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GABRIELLI ERIC</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">CA: 234574 · Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SO WATT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">MOROSAGLIA (20218)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 11 70 84 85</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 MURA ENRIQUE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CASA MEA</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CASTELLARE-DI-CASINCA (20213)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 26 51 75 27</span></div><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 26 51 75 27</span> <span class="contact-tag">site</span></div><div class="contact-row">📧 <span class="contact-value">casamea@orange.fr</span></div><div class="contact-row">📧 <span class="contact-value">contact@local.fr</span> <span class="contact-tag">site</span></div><div class="contact-row">🌐 <a href="http://www.casa-mea.fr/" class="contact-link" target="_blank">www.casa-mea.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Frederic Breton</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plomberie, chauffage</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">COMPTOIR DU PLATRE BASTIA</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">04 95 59 27 00</span></div><div class="contact-row">📧 <span class="contact-value">contact@comptoirhabitat.fr</span></div><div class="contact-row">🌐 <a href="http://www.comptoirhabitat.fr/" class="contact-link" target="_blank">www.comptoirhabitat.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Jacques Bauris</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 4673A</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MS INSTALLATION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20090)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495529890</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 COSSU SEBASTIEN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN COURANT ELECTRIQUE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ</div><div class="metier-acts">Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">PB ELEC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GROSSETO PRUGNA (20166)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495216727</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 POLI Alexandre</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION EN COURANT ELECTRIQUE, ASCENSEURS, MONTE-CHARGE, DETECTION D'ALARME, ECLAIRAGE</div><div class="metier-acts">Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">CRC RAMPA</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CANALE DI VERDE (20230)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495388005</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RAMPA CLAIRE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">FRANCESCHINI MARTIN</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">OMESSA (20236)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495474492</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FRANCESCHINI MARTIN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">RACHIDI CONSTRUCTION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495360997</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 RACHIDI RADOUAN</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ASSAINISSEMENT DU TERRAIN-DRAINAGE, AUVENT-BALCON (MACONNERIE), BETON ARME, CHAINAGES</div><div class="metier-acts">Maçon</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">LIMELETTE MARC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BORGO (20290)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495586042</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LIMELETTE MARC</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">INTRAPRESA CORDOLIANI</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BIGUGLIA (20620)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495343964</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 CORDOLIANI GUILLAUME</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ COUVERTURE, COUVERTURES (ARDOISE-TUILE-ZINC-FIBRE CIMENT), DESCENTES ET COLLECTES DES EAUX PLUVIALES, DESCENTES ET COLLECTES DES EAUX USEES</div><div class="metier-acts">Couvreur</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ALU CONFORT</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20600)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495307625</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ALESSANDRI PATRICK</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuisier, Agenceur</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">DIGI'CLIM2B</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SAN MARTINO DI LOTA (20200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0622742808</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 FALCONETTI VALERIE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ CLIMATISATION, ELECTRICITE</div><div class="metier-acts">Electricien</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">LES CASTORS DU BOIS</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PINO (20228)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0975470884</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GIUDICELLI CHRISTOPHE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Agenceur, Menuisier</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">PHILIPPE GASC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">GROSSA (20100)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495734890</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 GASC PHILIPPE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Entreprise générale</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ETS NICOLAI FRERES</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">SOTTA (20146)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0495702110</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BEAUVARLET  JEAN JACQUES</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plombier - Chauffagiste</div></div>
+      
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ETCHEMENDY</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">PERI (20167)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 22 59 07 23</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">sarletchemendy@gmail.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 JEAN-MARC ETHEMENDY</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MIC INSURANCE</div>
+      <div class="card-financier">CA: 304038 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MB CONSTRUCTION SARL</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">VICO (20118)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 84 76 44 99</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">lisandru.fieschi@wanadoo.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Manuel DA SILVA</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de maçonnerie générale</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 2582646 · Effectif: 03 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">ACACIA PEINTURE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20200)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 22 45 09 56</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">acaciapeinture@gmail.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 ANTOINE SAOLETTI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Peinture, vitrerie</div></div>
+      <div class="badges-block"><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA IARD</div>
+      <div class="card-financier">CA: 799043 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">MENUISERIE EBENISTERIE PIERI</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">CORTE (20250)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">06 37 20 78 63</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">menuiserie-pieri@orange.fr</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 BARBARA PIERI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Menuiserie bois</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : GROUPAMA</div>
+      <div class="card-financier">CA: 1563771 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">FRANDIPLAC</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">FURIANI (20600)</div>
+      <div class="contact-block"><div class="contact-row mobile-highlight">📱 <span class="contact-value">0615485205</span> <span class="contact-tag">dirigeant</span></div><div class="contact-row">📧 <span class="contact-value">contact.frandiplac@gmail.com</span> <span class="contact-tag">dirigeant</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 DAVID /  THOMAS FRANDINA</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Travaux de plâtrerie</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-blue">Qualibat</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ IARD</div>
+      <div class="card-financier">CA: 1097232 · Effectif: 11 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SARL CORSICALORE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BASTIA (20200)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 02 19 55 19</span></div><div class="contact-row">🌐 <a href="http://www.corsicalore.fr/" class="contact-link" target="_blank">www.corsicalore.fr</a></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Patricia Corda</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Climatisation, ventilation</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">CA: 401486 · Effectif: 02 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">G.ELECTRICITE INSULAIRE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 244.8deg, #2a2a4a 244.8deg);">
+          <span>68%</span>
+        </div>
+      </div>
+      <div class="fiche-location">BIGUGLIA (20620)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">0781646791</span></div><div class="contact-row">📧 <span class="contact-value">g.electriciteinsulaire@gmail.com</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 SIDI GAOUZI</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Installation électrique</div></div>
+      <div class="badges-block"><span class="badge badge-orange">Qualifelec</span></div>
+      <div class="card-assurance">🛡️ Assuré : ALLIANZ</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">LC CLIMATISATION</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">AJACCIO (20000)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 81 11 23 38</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 LEANDRI PHILIPPE</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ ALIMENTATION/DISTRIBUTION EN EAU CHAUDE ET FROIDE, ALIMENTATION EN EAU, ALIMENTATION EN GAZ, APPAREILS SANITAIRES</div><div class="metier-acts">Plombier - Chauffagiste</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">Effectif: NN · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SAS CHEZE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">ALERIA (20270)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">04 95 57 11 85</span></div></div>
+      <div class="dirigeant-block"><div class="dir-name">👤 Laurent Cheze</div></div>
+      <div class="metier-block"><div class="metier-spec">🏗️ Plomberie, chauffage</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-assurance">🛡️ Assuré : MMA IARD (Le Mans)</div>
+      <div class="card-financier">Effectif: 01 · PME</div>
+    </div>
+
+    <div class="fiche-card">
+      <div class="fiche-header">
+        <div class="fiche-name">SAS MAINTENANCE FRIGORIFIQUE CORSE</div>
+        <div class="score-ring" style="background: conic-gradient(#4fc3f7 230.4deg, #2a2a4a 230.4deg);">
+          <span>64%</span>
+        </div>
+      </div>
+      <div class="fiche-location">TAVACO (20167)</div>
+      <div class="contact-block"><div class="contact-row">📞 <span class="contact-value">06 23 88 05 36</span></div><div class="contact-row">🌐 <a href="http://www.micaellifroidetclim.com/" class="contact-link" target="_blank">www.micaellifroidetclim.com</a></div></div>
+      
+      <div class="metier-block"><div class="metier-spec">🏗️ Code APE : 3320B</div></div>
+      <div class="badges-block"><span class="badge badge-rge">RGE</span><span class="badge badge-teal">QualiENR</span></div>
+      <div class="card-no-assurance">⚠️ Pas d'assurance identifiée</div>
+      <div class="card-financier">CA: 1839196 · Effectif: 03 · PME</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Cet échantillon contient 50 fiches sur 337 dans le département 20.</p>
+  <p class="email"><a href="mailto:paul@growth-factory.fr">paul@growth-factory.fr</a></p>
+</div>
+
+</body>
+</html>

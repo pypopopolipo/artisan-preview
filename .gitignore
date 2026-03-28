@@ -6,5 +6,6 @@ node_modules/
 .pj_progress.json
 reconciliation_stats.json
 preview_data.json
+.env
 
 .vercel
