@@ -153,10 +153,28 @@ const pctRGE = Math.round(100 * hasRGE / total);
 const hasAssurance = pool.filter(r => r.assurance_rc || r.assurance_dc).length;
 const pctAssurance = Math.round(100 * hasAssurance / total);
 
-// --- HTML escape ---
+// --- Helpers ---
 function esc(s) {
   if (!s) return '';
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function fmtPhone(p) {
+  if (!p) return '';
+  const clean = p.replace(/[\s.\-()]/g, '');
+  if (/^\d{10}$/.test(clean)) return clean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  return p;
+}
+function fmtCA(ca) {
+  if (!ca) return '';
+  const n = parseInt(String(ca).replace(/\s/g, ''), 10);
+  if (isNaN(n) || n <= 0) return '';
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0', '') + ' M\u20ac';
+  if (n >= 1000) return Math.round(n / 1000) + ' K\u20ac';
+  return n + ' \u20ac';
+}
+function fmtEffectif(e) {
+  if (!e || e === 'NN' || e === '00' || e === 'NR' || e === '0') return '';
+  return e;
 }
 
 // --- Build cards HTML ---
@@ -185,12 +203,12 @@ function buildCard(r) {
   const webFixes = r.website_fixes;
 
   if (phone) {
-    contactHTML += `<div class="contact-row">\u{1F4DE} <span class="contact-value">${esc(phone)}</span></div>`;
+    contactHTML += `<div class="contact-row">\u{1F4DE} <span class="contact-value">${esc(fmtPhone(phone))}</span></div>`;
   }
   if (webFixes && webFixes !== phone) {
     const fixes = webFixes.split('|').filter(f => f && f !== phone).slice(0, 2);
     fixes.forEach(f => {
-      contactHTML += `<div class="contact-row">\u{1F4DE} <span class="contact-value">${esc(f.trim())}</span> <span class="contact-tag">site</span></div>`;
+      contactHTML += `<div class="contact-row">\u{1F4DE} <span class="contact-value">${esc(fmtPhone(f.trim()))}</span> <span class="contact-tag">site</span></div>`;
     });
   }
 
@@ -198,13 +216,13 @@ function buildCard(r) {
 
   if (mobile) {
     const cls = isMobile(mobile) ? ' mobile-highlight' : '';
-    contactHTML += `<div class="contact-row${cls}">\u{1F4F1} <span class="contact-value">${esc(mobile)}</span> <span class="contact-tag">dirigeant</span></div>`;
+    contactHTML += `<div class="contact-row${cls}">\u{1F4F1} <span class="contact-value">${esc(fmtPhone(mobile))}</span> <span class="contact-tag">dirigeant</span></div>`;
   }
   if (webMobiles) {
     const mobs = webMobiles.split('|').filter(m => m && m !== mobile).slice(0, 2);
     mobs.forEach(m => {
       const cls = isMobile(m) ? ' mobile-highlight' : '';
-      contactHTML += `<div class="contact-row${cls}">\u{1F4F1} <span class="contact-value">${esc(m.trim())}</span> <span class="contact-tag">site</span></div>`;
+      contactHTML += `<div class="contact-row${cls}">\u{1F4F1} <span class="contact-value">${esc(fmtPhone(m.trim()))}</span> <span class="contact-tag">site</span></div>`;
     });
   }
 
@@ -297,9 +315,11 @@ function buildCard(r) {
   // Financier
   let finHTML = '';
   const finParts = [];
-  if (r.chiffre_affaires) finParts.push(`CA: ${esc(r.chiffre_affaires)}`);
-  if (r.api_tranche_effectif) finParts.push(`Effectif: ${esc(r.api_tranche_effectif)}`);
-  else if (r.nb_salaries) finParts.push(`Salariés: ${esc(r.nb_salaries)}`);
+  const caFmt = fmtCA(r.chiffre_affaires);
+  if (caFmt) finParts.push(`CA: ${caFmt}`);
+  const effFmt = fmtEffectif(r.api_tranche_effectif);
+  if (effFmt) finParts.push(`Effectif: ${esc(effFmt)}`);
+  else if (fmtEffectif(r.nb_salaries)) finParts.push(`Salariés: ${esc(fmtEffectif(r.nb_salaries))}`);
   if (r.api_categorie_entreprise) finParts.push(esc(r.api_categorie_entreprise));
   if (finParts.length) {
     finHTML = `<div class="card-financier">${finParts.join(' · ')}</div>`;

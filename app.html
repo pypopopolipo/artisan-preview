@@ -310,7 +310,7 @@
   /* Metier */
   .metier-block { margin-bottom: 8px; }
   .metier-spec { font-size: 0.85em; color: #90a4ae; font-weight: 600; }
-  .metier-acts { font-size: 0.78em; color: #607d8b; }
+  .metier-acts { font-size: 0.78em; color: #607d8b; text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 
   /* Badges */
   .badges-block { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
@@ -439,7 +439,7 @@
     <h1>Base Artisans <span>BTP</span></h1>
     <p>Espace client</p>
     <input type="text" class="login-input" id="accessCode" placeholder="Code d'acces" autocomplete="off">
-    <button class="login-btn" id="loginBtn">Acceder</button>
+    <button class="login-btn" id="loginBtn">Accéder</button>
     <div class="login-error" id="loginError">Code invalide ou aucune donnee associee.</div>
   </div>
 </div>
@@ -452,13 +452,13 @@
     <div class="header-top">
       <h1>Base Artisans <span>BTP</span></h1>
       <div class="header-actions">
-        <button class="btn-excel" onclick="exportExcel()">Telecharger Excel</button>
-        <button class="btn-logout" onclick="doLogout()">Deconnexion</button>
+        <button class="btn-excel" onclick="exportExcel()">Télécharger Excel</button>
+        <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
       </div>
     </div>
     <div class="stats-bar" id="statsBar"></div>
     <div class="contacted-bar" id="contactedBar">
-      <span class="label">Contactes :</span>
+      <span class="label">Contactés :</span>
       <div class="progress-bg"><div class="progress-fg" id="contactedProgress" style="width:0%"></div></div>
       <span class="count" id="contactedCount">0 / 0</span>
     </div>
@@ -487,7 +487,7 @@
 
   <!-- Pagination -->
   <div class="pagination" id="pagination">
-    <button class="btn-page" id="btnPrev" onclick="changePage(-1)">Precedent</button>
+    <button class="btn-page" id="btnPrev" onclick="changePage(-1)">Précédent</button>
     <span class="page-info" id="pageInfo">Page 1 sur 1</span>
     <button class="btn-page" id="btnNext" onclick="changePage(1)">Suivant</button>
   </div>
@@ -509,11 +509,7 @@ let contactFilterState = 0; // 0=all, 1=contacted, 2=non-contacted
 
 // ===== INIT =====
 window.addEventListener('load', () => {
-  console.log('window.supabase =', typeof window.supabase, window.supabase);
-  document.getElementById('loginBtn').addEventListener('click', () => {
-    console.log('Button clicked');
-    doLogin();
-  });
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
   document.getElementById('accessCode').addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
   });
@@ -533,10 +529,6 @@ async function doLogin() {
   document.getElementById('loginBtn').disabled = true;
 
   try {
-    if (!window.supabase || !window.supabase.createClient) {
-      alert('Supabase lib not loaded. window.supabase=' + typeof window.supabase);
-      return;
-    }
     sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
       global: {
         headers: { 'x-client-code': code }
@@ -590,7 +582,6 @@ async function doLogin() {
 
   } catch (err) {
     console.error('Login error:', err);
-    alert('Erreur login: ' + (err.message || JSON.stringify(err)));
     document.getElementById('loginError').style.display = 'block';
     document.getElementById('loginBtn').disabled = false;
   }
@@ -687,7 +678,7 @@ function toggleFilter(btn) {
 function cycleContactFilter() {
   contactFilterState = (contactFilterState + 1) % 3;
   const btn = document.getElementById('filterContacted');
-  const labels = ['Tous', 'Contactes', 'Non contactes'];
+  const labels = ['Tous', 'Contactés', 'Non contactés'];
   btn.textContent = labels[contactFilterState];
   btn.classList.toggle('active', contactFilterState !== 0);
   applyFilters();
@@ -785,9 +776,9 @@ function buildCard(f) {
   const emailWeb = f.website_emails;
   const site = f.site_web;
 
-  if (tel) contactHtml += `<div class="contact-row">&#128222; <a href="tel:${tel}" class="contact-link">${tel}</a></div>`;
-  if (mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${mob}" class="contact-link contact-value">${mob}</a> <span class="contact-tag">dirigeant</span></div>`;
-  if (webMob && webMob !== mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${webMob.split(',')[0].trim()}" class="contact-link contact-value">${webMob}</a> <span class="contact-tag">site</span></div>`;
+  if (tel) contactHtml += `<div class="contact-row">&#128222; <a href="tel:${tel.replace(/[\s.\-]/g,'')}" class="contact-link">${fmtPhone(tel)}</a></div>`;
+  if (mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${mob.replace(/[\s.\-]/g,'')}" class="contact-link contact-value">${fmtPhone(mob)}</a> <span class="contact-tag">dirigeant</span></div>`;
+  if (webMob && webMob !== mob) contactHtml += `<div class="contact-row mobile-highlight">&#128241; <a href="tel:${webMob.split(',')[0].trim().replace(/[\s.\-]/g,'')}" class="contact-link contact-value">${fmtPhone(webMob.split(',')[0].trim())}</a> <span class="contact-tag">site</span></div>`;
   if (emailGen) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailGen}" class="contact-link">${emailGen}</a></div>`;
   if (emailDir) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailDir}" class="contact-link">${emailDir}</a> <span class="contact-tag">dirigeant</span></div>`;
   if (emailWeb && emailWeb !== emailGen && emailWeb !== emailDir) contactHtml += `<div class="contact-row">&#9993; <a href="mailto:${emailWeb}" class="contact-link">${emailWeb}</a> <span class="contact-tag">site</span></div>`;
@@ -806,10 +797,10 @@ function buildCard(f) {
   }
 
   let metierHtml = '';
-  if (f.specialite || f.activites_principales) {
+  if (f.activites_principales || f.specialite) {
     metierHtml = '<div class="metier-block">';
-    if (f.specialite) metierHtml += `<div class="metier-spec">${esc(f.specialite)}</div>`;
-    if (f.activites_principales) metierHtml += `<div class="metier-acts">${esc(f.activites_principales)}</div>`;
+    if (f.activites_principales) metierHtml += `<div class="metier-acts">${esc(truncate(f.activites_principales, 120))}</div>`;
+    if (f.specialite) metierHtml += `<div class="metier-spec">${esc(titleCase(f.specialite))}</div>`;
     metierHtml += '</div>';
   }
 
@@ -839,7 +830,7 @@ function buildCard(f) {
       ${metierHtml}
       ${badgesHtml}
       <button class="btn-contacted${m.contacted ? ' active' : ''}" onclick="toggleContacted('${esc(siret)}', this)">
-        ${m.contacted ? '&#10003; Contacte' : 'Marquer contacte'}
+        ${m.contacted ? '&#10003; Contacté' : 'Marquer contacté'}
       </button>
       <textarea class="note-field" placeholder="Notes..." onblur="saveNote('${esc(siret)}', this)">${esc(m.notes)}</textarea>
     </div>
@@ -849,6 +840,32 @@ function buildCard(f) {
 function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtPhone(p) {
+  if (!p) return '';
+  const clean = p.replace(/[\s.\-()]/g, '');
+  if (/^\d{10}$/.test(clean)) return clean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  return p;
+}
+function fmtCA(ca) {
+  if (!ca) return '';
+  const n = parseInt(String(ca).replace(/\s/g, ''), 10);
+  if (isNaN(n) || n <= 0) return '';
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0', '') + ' M\u20ac';
+  if (n >= 1000) return Math.round(n / 1000) + ' K\u20ac';
+  return n + ' \u20ac';
+}
+function fmtEffectif(e) {
+  if (!e || e === 'NN' || e === '00' || e === 'NR' || e === '0') return '';
+  return e;
+}
+function truncate(s, max) {
+  if (!s || s.length <= max) return s || '';
+  return s.substring(0, max) + '\u2026';
+}
+function titleCase(s) {
+  if (!s) return '';
+  return s.toLowerCase().replace(/(^|\s|'|-)\w/g, c => c.toUpperCase());
 }
 
 // ===== PAGINATION =====
@@ -868,7 +885,7 @@ async function toggleContacted(siret, btn) {
   markers[siret] = m;
 
   btn.classList.toggle('active', m.contacted);
-  btn.innerHTML = m.contacted ? '&#10003; Contacte' : 'Marquer contacte';
+  btn.innerHTML = m.contacted ? '&#10003; Contacté' : 'Marquer contacté';
   btn.closest('.fiche-card').classList.toggle('contacted', m.contacted);
 
   updateContactedBar();
@@ -950,7 +967,7 @@ function exportExcel() {
     cols.forEach(c => { row[headers[c]] = f[c] || ''; });
     // Add marker info
     const m = getMarker(f);
-    row['Contacte'] = m.contacted ? 'Oui' : '';
+    row['Contacté'] = m.contacted ? 'Oui' : '';
     row['Notes'] = m.notes || '';
     return row;
   });
