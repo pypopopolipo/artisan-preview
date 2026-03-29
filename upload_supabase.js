@@ -28,9 +28,13 @@ function parseArgs() {
     else if (args[i] === '--client-email' && args[i + 1]) opts.clientEmail = args[++i];
     else if (args[i] === '--client-code' && args[i + 1]) opts.clientCode = args[++i];
   }
-  if (!opts.dept || !opts.clientName || !opts.clientEmail || !opts.clientCode) {
-    console.error('Usage: node upload_supabase.js --dept 30 --client-name "Rémi Martin" --client-email "agence@example.fr" --client-code MARTIN30');
+  if (!opts.dept || !opts.clientName || !opts.clientEmail) {
+    console.error('Usage: node upload_supabase.js --dept 30 --client-name "Rémi Martin" --client-email "agence@example.fr" [--client-code optionnel]');
     process.exit(1);
+  }
+  if (!opts.clientCode) {
+    opts.clientCode = require('crypto').randomBytes(5).toString('hex');
+    console.log('Code auto-généré:', opts.clientCode);
   }
   return opts;
 }
