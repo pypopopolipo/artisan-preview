@@ -27,9 +27,10 @@ function parseArgs() {
     else if (args[i] === '--client-name' && args[i + 1]) opts.clientName = args[++i];
     else if (args[i] === '--client-email' && args[i + 1]) opts.clientEmail = args[++i];
     else if (args[i] === '--client-code' && args[i + 1]) opts.clientCode = args[++i];
+    else if (args[i] === '--postcodes' && args[i + 1]) opts.postcodes = args[++i].split(',').map(s => s.trim());
   }
   if (!opts.dept || !opts.clientName || !opts.clientEmail) {
-    console.error('Usage: node upload_supabase.js --dept 30 --client-name "Rémi Martin" --client-email "agence@example.fr" [--client-code optionnel]');
+    console.error('Usage: node upload_supabase.js --dept 30 --client-name "Rémi Martin" --client-email "agence@example.fr" [--client-code X] [--postcodes 49400,49390,...]');
     process.exit(1);
   }
   if (!opts.clientCode) {
@@ -178,13 +179,15 @@ async function main() {
   const data = allRows.slice(1);
   console.log(`Parsed ${data.length} rows, ${headers.length} columns`);
 
-  // 2. Filter by department
+  // 2. Filter by department or specific postcodes
   const deptPrefix = opts.dept.padStart(2, '0');
+  const cpSet = opts.postcodes ? new Set(opts.postcodes) : null;
   const deptRows = data.filter(row => {
     const cp = v(row, 'code_postal', headers);
+    if (cpSet) return cpSet.has(cp);
     return cp.startsWith(deptPrefix);
   });
-  console.log(`Dept ${deptPrefix}: ${deptRows.length} fiches total`);
+  console.log(`${cpSet ? cpSet.size + ' CP spécifiques' : 'Dept ' + deptPrefix}: ${deptRows.length} fiches total`);
 
   // 3. Filter to fiches with at least 1 contact
   const contactRows = deptRows.filter(row => hasContact(row, headers));
