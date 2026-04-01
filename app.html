@@ -515,6 +515,7 @@ const SUPABASE_KEY = 'sb_publishable_knpaWjKlU6MV_XaTzoJPbQ_1G4pffBg';
 const PER_PAGE = 50;
 
 let sbClient = null;
+let clientId = null;
 let allFiches = [];
 let markers = {};  // siret -> { contacted, notes }
 let filtered = [];
@@ -573,6 +574,7 @@ async function doLogin() {
     }
 
     allFiches = allData;
+    clientId = allData[0]?.client_id || null;
     localStorage.setItem('artisan_client_code', code);
 
     // Fetch markers
@@ -932,10 +934,11 @@ async function toggleContacted(siret, btn) {
 
   try {
     const { error } = await sbClient.from('markers').upsert({
+      client_id: clientId,
       siret: siret,
       contacted: m.contacted,
       notes: m.notes
-    }, { onConflict: 'siret' });
+    }, { onConflict: 'client_id,siret' });
     flashCard(card, !error);
   } catch (e) {
     flashCard(card, false);
@@ -954,10 +957,11 @@ async function saveNote(siret, textarea) {
   const card = textarea.closest('.fiche-card');
   try {
     const { error } = await sbClient.from('markers').upsert({
+      client_id: clientId,
       siret: siret,
       contacted: m.contacted,
       notes: m.notes
-    }, { onConflict: 'siret' });
+    }, { onConflict: 'client_id,siret' });
     flashCard(card, !error);
   } catch (e) {
     flashCard(card, false);
